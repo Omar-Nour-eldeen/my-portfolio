@@ -38,9 +38,9 @@ const Projects = () => {
     <section id="projects" className="py-20 px-6 bg-gradient-secondary">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">Featured Projects</h2>
-          <div className="w-20 h-1 bg-gradient-primary mx-auto rounded-full" />
-          <p className="text-xl text-muted-foreground mt-6 max-w-2xl mx-auto">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 hover:scale-105 transition-transform duration-300">My Projects</h2>
+          <div className="w-20 h-1 bg-gradient-primary mx-auto rounded-full hover:w-24 transition-all duration-300" />
+          <p className="text-xl text-muted-foreground mt-6 max-w-2xl mx-auto hover:text-foreground transition-colors duration-300">
             A showcase of my recent work and creative solutions
           </p>
         </div>
@@ -49,7 +49,7 @@ const Projects = () => {
           {projects.map((project, index) => (
             <Card 
               key={index} 
-              className="group overflow-hidden bg-card/50 backdrop-blur-sm border-border/50 hover:shadow-elegant transition-all duration-300 hover:-translate-y-2"
+              className="group overflow-hidden bg-card/50 backdrop-blur-sm border-border/50 hover:shadow-elegant transition-all duration-300 hover:-translate-y-2 bg-gray-800"
             >
               <div className="relative overflow-hidden">
                 <img 
@@ -61,27 +61,23 @@ const Projects = () => {
               </div>
               
               <CardContent className="p-6">
-                <h3 className="text-xl font-semibold mb-3 group-hover:text-primary transition-colors">
+                <h3 className="text-xl font-semibold mb-3 group-hover:text-primary hover:scale-105 transition-all duration-300">
                   {project.title}
                 </h3>
-                <p className="text-muted-foreground mb-4 line-clamp-3">
+                <p className="text-muted-foreground mb-4 line-clamp-3 hover:text-foreground transition-colors duration-300">
                   {project.description}
                 </p>
                 
                 <div className="flex flex-wrap gap-2 mb-4">
                   {project.technologies.map((tech) => (
-                    <Badge key={tech} variant="outline" className="text-xs">
+                    <Badge key={tech} variant="outline" className="text-xs hover:scale-105 hover:bg-primary/20 transition-all duration-300 bg-gray-900">
                       {tech}
                     </Badge>
                   ))}
                 </div>
                 
                 <div className="flex gap-3">
-                  <Button size="sm" variant="outline" className="flex-1">
-                    <Github className="w-4 h-4 mr-2" />
-                    Code
-                  </Button>
-                  <Button size="sm" className="flex-1 bg-gradient-primary">
+                  <Button size="sm" className="flex-1 bg-gradient-primary hover:scale-105 hover:shadow-glow transition-all duration-300">
                     <ExternalLink className="w-4 h-4 mr-2" />
                     Live
                   </Button>

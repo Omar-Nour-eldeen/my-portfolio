@@ -1,8 +1,11 @@
 {
-  "name": "vite_react_shadcn_ts",
+  "name": "omar-nour-portfolio",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "description": "Creative Developer Portfolio - Omar Nour",
+  "author": "Omar Nour",
+  "keywords": ["portfolio", "developer", "react", "typescript", "tailwind"],
   "scripts": {
     "dev": "vite",
     "build": "vite build",

@@ -74,6 +74,7 @@ export default {
 			},
 			boxShadow: {
 				'glow': 'var(--shadow-glow)',
+				'glow-lg': 'var(--shadow-glow-lg)',
 				'elegant': 'var(--shadow-elegant)',
 			},
 			transitionTimingFunction: {
@@ -100,6 +101,18 @@ export default {
 					'0%, 100%': { transform: 'translateY(0px)' },
 					'50%': { transform: 'translateY(-10px)' },
 				},
+				'glow-pulse': {
+					'0%, 100%': { 
+						transform: 'scale(1)', 
+						filter: 'blur(8px)',
+						opacity: '0.2'
+					},
+					'50%': { 
+						transform: 'scale(1.3)', 
+						filter: 'blur(12px)',
+						opacity: '0.6'
+					}
+				},
 				'fade-in': {
 					'0%': { opacity: '0', transform: 'translateY(20px)' },
 					'100%': { opacity: '1', transform: 'translateY(0px)' },
@@ -109,6 +122,7 @@ export default {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'float': 'float 6s ease-in-out infinite',
+				'glow-pulse': 'glow-pulse 4s ease-in-out infinite',
 				'fade-in': 'fade-in 0.6s ease-out forwards',
 			}
 		}
