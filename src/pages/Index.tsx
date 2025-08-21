@@ -19,31 +19,31 @@ const Index = () => {
         <section id="home">
           <Hero />
         </section>
-        <section id="about">
+        <section id="about" className="scroll-mt-20 md:scroll-mt-24">
           <About />
         </section>
-        <section id="education">
+        <section id="education" className="scroll-mt-20 md:scroll-mt-24">
           <Education />
         </section>
-        <section id="experience">
+        <section id="experience" className="scroll-mt-20 md:scroll-mt-24">
           <WorkExperience />
         </section>
-        <section id="services">
+        <section id="services" className="scroll-mt-20 md:scroll-mt-24">
           <Services />
         </section>
-        <section id="projects">
+        <section id="projects" className="scroll-mt-20 md:scroll-mt-24">
           <Projects />
         </section>
-        <section id="achievements">
+        <section id="achievements" className="scroll-mt-20 md:scroll-mt-24">
           <Achievements />
         </section>
-        <section id="testimonials">
+        <section id="testimonials" className="scroll-mt-20 md:scroll-mt-24">
           <Testimonials />
         </section>
-        <section id="contact">
+        <section id="contact" className="scroll-mt-20 md:scroll-mt-24">
           <Contact />
         </section>
-        <section id="thankyou">
+        <section id="thankyou" className="scroll-mt-20 md:scroll-mt-24">
           <ThankYou />
         </section>
       </main>

@@ -1,7 +1,13 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Star, Quote } from "lucide-react";
+import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 
 const Testimonials = () => {
+  const { ref: testimonialsRef, isIntersecting } = useIntersectionObserver({
+    threshold: 0.2,
+    rootMargin: '-50px'
+  });
+  
   const testimonials = [
     {
       name: "Sarah Johnson",
@@ -34,9 +40,9 @@ const Testimonials = () => {
   ];
 
   return (
-    <section className="py-20 px-6 bg-gradient-secondary">
+    <section ref={testimonialsRef} className="py-20 px-6 bg-gradient-secondary">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
+        <div className={`text-center mb-16 transition-all duration-700 ease-out ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
           <h2 className="text-4xl md:text-5xl font-bold mb-6 hover:scale-105 transition-transform duration-300">Client Testimonials</h2>
           <div className="w-20 h-1 bg-gradient-primary mx-auto rounded-full hover:w-24 transition-all duration-300" />
           <p className="text-xl text-muted-foreground mt-6 max-w-2xl mx-auto hover:text-foreground transition-colors duration-300">
@@ -44,14 +50,14 @@ const Testimonials = () => {
           </p>
         </div>
         
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className={`grid md:grid-cols-2 gap-8 transition-all duration-700 ease-out delay-200 ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
           {testimonials.map((testimonial, index) => (
             <Card 
               key={index}
               className="group overflow-hidden bg-card/50 backdrop-blur-sm border-border/50 hover:shadow-elegant transition-all duration-300 hover:-translate-y-2"
             >
               <CardContent className="p-8">
-                <div className="flex items-start gap-4">
+                <div className="flex flex-col sm:flex-row items-start gap-4">
                   <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center hover:bg-primary/30 transition-colors duration-300">
                     <Quote className="w-6 h-6 text-primary" />
                   </div>

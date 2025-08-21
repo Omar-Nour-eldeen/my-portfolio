@@ -2,22 +2,28 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { buttonVariants } from '@/components/ui/button';
 import Index from '../pages/Index';
+import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 
 const About = () => {
+  const { ref: aboutRef, isIntersecting } = useIntersectionObserver({
+    threshold: 0.2,
+    rootMargin: '-50px'
+  });
+  
   const skills = [
     "C#", "ASP.NET", "Entity Framework", "JavaScript", "HTML5", 
     "CSS3", "Bootstrap", "SQL", "SQL Server", "Problem Solving"
   ];
 
   return (
-    <section className="py-20 px-6 bg-gradient-secondary">
+    <section ref={aboutRef} className="py-20 px-6 bg-gradient-secondary">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
+        <div className={`text-center mb-16 transition-all duration-700 ease-out ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
           <h2 className="text-4xl md:text-5xl font-bold mb-6 hover:scale-105 transition-transform duration-300">About Me</h2>
           <div className="w-20 h-1 bg-gradient-primary mx-auto rounded-full hover:w-24 transition-all duration-300" />
         </div>
         
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+        <div className={`grid md:grid-cols-2 gap-12 items-center transition-all duration-700 ease-out delay-200 ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
           <div>
             <h3 className="text-2xl font-semibold mb-6 text-primary hover:scale-105 transition-transform duration-300">
               Passionate about web design
