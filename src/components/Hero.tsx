@@ -58,7 +58,7 @@ const Hero = () => {
           videoElement.parentNode?.appendChild(fallbackImage);
         }}
       >
-        <source src="../public/hero-bg.mp4" type="video/mp4" />
+        <source src="/hero-bg.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
       {/* Overlay */}
@@ -72,7 +72,7 @@ const Hero = () => {
             <div className="w-48 h-48 md:w-64 md:h-64 rounded-full p-1 bg-gradient-to-r from-primary to-accent shadow-glow">
               <div className="w-full h-full rounded-full overflow-hidden bg-background">
                 <img
-                  src="../public/my-photo.jpg"
+                  src="/my-photo.jpg"
                   alt="Profile"
                   className="w-full h-full object-cover"
                   onError={(e) => {

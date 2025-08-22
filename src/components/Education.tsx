@@ -15,7 +15,7 @@ const Education = () => {
       location: "Egypt, Cairo",
       description: "Specialized in Computer science with focus on web development and database systems.",
       gpa: "3.17/4.0",
-      logo: "../public/helwan-university.png"
+      logo: "/helwan-university.png"
     },
     {
       degree: "Fullstack .NET Web Development Certification (In Progress)",
@@ -24,7 +24,7 @@ const Education = () => {
       location: "Egypt, Cairo",
       description: "Complete Web Development training covering modern technologies and best practices.",
       gpa: "Not yet",
-      logo: "../public/depi-logo.png"
+      logo: "/depi-logo.png"
     }
   ];
 

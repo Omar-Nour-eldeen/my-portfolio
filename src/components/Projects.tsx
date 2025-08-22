@@ -2,9 +2,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ExternalLink, Github } from "lucide-react";
-import project1 from "@/../public/project1.jpg";
-import project2 from "@/../public/project2.jpg";
-import project3 from "@/../public/project3.jpg";
+import project1 from "@/assets/project1.jpg";
+import project2 from "@/assets/project2.jpg";
+import project3 from "@/assets/project3.jpg";
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 
 const Projects = () => {

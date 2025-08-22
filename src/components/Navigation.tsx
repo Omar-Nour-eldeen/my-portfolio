@@ -54,7 +54,7 @@ const Navigation = () => {
   const handleResumeDownload = () => {
     // Create a link element to trigger download
     const link = document.createElement('a');
-    link.href = '../public/omar-nour-resume.pdf';
+    link.href = '/omar-nour-resume.pdf';
     link.download = 'Omar-Nour-Resume.pdf';
     link.target = '_blank';
     

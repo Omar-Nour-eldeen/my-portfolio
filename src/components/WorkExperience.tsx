@@ -22,7 +22,7 @@ const WorkExperience = () => {
         "Worked within an Agile team to deliver functional modules",
         "Optimized database queries to improve application performance"
       ],
-      logo: "../public/depi-logo.png"
+      logo: "/depi-logo.png"
     }
   ];
 
