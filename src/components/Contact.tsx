@@ -4,12 +4,60 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
+import { useToast } from "@/components/ui/use-toast";
+import { FormEvent, useState } from "react";
+import { Toaster } from "@/components/ui/toaster";
 
 const Contact = () => {
   const { ref: contactRef, isIntersecting } = useIntersectionObserver({
     threshold: 0.2,
     rootMargin: '-50px'
   });
+
+
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const form = e.currentTarget;
+    const data = new FormData(form);
+
+    try {
+      const res = await fetch("https://formspree.io/f/xgvlgwqo", {
+        method: "POST",
+        body: data,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      if (res.ok) {
+        toast({
+          title: "Sent Successfully ✅",
+          description: "Thanks for reaching out, I will reply to you.",
+          className: "fixed top-5 right-5 max-w-[90%] sm:max-w-md md:max-w-lg lg:max-w-sm bg-green-600 text-white border-none shadow-lg rounded-lg text-center justify-center"
+        });
+        form.reset();
+      } else {
+        toast({
+          title: "Failed to send ❌",
+          description: "Please check the data you entered and try again.",
+          className: "fixed top-5 right-5 max-w-[90%] sm:max-w-md md:max-w-lg lg:max-w-sm bg-red-600 text-white border-none shadow-lg rounded-lg text-center justify-center"
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error ⚠️",
+        description: "An unexpected error occurred! please try again.",
+        className: "fixed top-5 right-5 max-w-[90%] sm:max-w-md md:max-w-lg lg:max-w-sm bg-yellow-500 text-black border-none shadow-lg rounded-lg text-center justify-center"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
   
   return (
     <section ref={contactRef} className="py-20 px-6 bg-gradient-secondary">
@@ -61,38 +109,40 @@ const Contact = () => {
 
           <Card className="bg-gray-800 border-border/50">
             <CardContent className="p-8">
-              <form className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="text-sm font-medium mb-2 block">First Name</label>
-                    <Input placeholder="John" className="bg-gray-900" />
+                    <Input name="firstName" placeholder="John" className="bg-gray-900" required/>
                   </div>
                   <div>
                     <label className="text-sm font-medium mb-2 block">Last Name</label>
-                    <Input placeholder="Doe" className="bg-gray-900" />
+                    <Input name="lastName" placeholder="Doe" className="bg-gray-900" required/>
                   </div>
                 </div>
 
                 <div>
                   <label className="text-sm font-medium mb-2 block">Email</label>
-                  <Input type="email" placeholder="john@example.com" className="bg-gray-900" />
+                  <Input name="email" type="email" placeholder="john@example.com" className="bg-gray-900" required/>
                 </div>
 
                 <div>
                   <label className="text-sm font-medium mb-2 block">Subject</label>
-                  <Input placeholder="Project Collaboration" className="bg-gray-900" />
+                  <Input name="subject" placeholder="Project Collaboration" className="bg-gray-900" required/>
                 </div>
 
                 <div>
                   <label className="text-sm font-medium mb-2 block">Message</label>
                   <Textarea
+                    name="message"
                     placeholder="Tell me about your project..."
                     className="min-h-[120px] bg-gray-900"
+                    required
                   />
                 </div>
 
-                <Button className="w-full bg-gradient-primary hover:shadow-glow hover:scale-105 transition-all duration-300">
-                  Send Message
+                <Button type="submit" disabled={loading} className="w-full bg-gradient-primary hover:shadow-glow hover:scale-105 transition-all duration-300">
+                  {loading ? "Sending..." : "Send Message"}
                 </Button>
               </form>
             </CardContent>

@@ -26,7 +26,7 @@ const Hero = () => {
   return (
     <section
       ref={heroRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-secondary"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-secondary pt-24 sm:pt-8"
     >
       {/* Background Video */}
       <video
