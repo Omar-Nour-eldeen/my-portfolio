@@ -20,7 +20,7 @@ const Projects = () => {
       image: project1,
       technologies: ["HTML", "CSS", "Bootstrap", "JS", "jQuery", "DataTables", "Toastr", "Animate.css"],
       github: "#",
-      live: "https://omar-nour-eldeen.github.io/FrontEnd_Task/index.html"
+      live: "https://omar-nour-eldeen.github.io/Admin_Dashboard/"
     },
     {
       title: "Mobile App Design",
