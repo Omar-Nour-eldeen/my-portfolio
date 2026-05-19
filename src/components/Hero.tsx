@@ -3,69 +3,251 @@ import { ArrowDown, Github, Linkedin, Mail } from "lucide-react";
 import TypingText from "./TypingText";
 import { useEffect, useRef } from "react";
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
+
+// ===== Neural Network Background Component =====
+const NeuralBackground = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const cv = canvasRef.current;
+    if (!cv) return;
+    const ctx = cv.getContext('2d');
+    if (!ctx) return;
+
+    let W: number, H: number;
+    let mx: number | null = null;
+    let my: number | null = null;
+    let dots: Dot[] = [];
+    let animFrame: number;
+
+    const isMobile = window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 768;
+
+    function resize() {
+      W = cv.width = window.innerWidth;
+      H = cv.height = window.innerHeight;
+      init();
+    }
+
+    // window.addEventListener('mousemove', (e) => {
+    //   mx = e.clientX;
+    //   my = e.clientY;
+    // });
+
+    // window.addEventListener('mouseleave', () => {
+    //   mx = null;
+    //   my = null;
+    // });
+
+    window.addEventListener('resize', resize);
+
+    class Dot {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      ph: number;
+      isTeal: boolean;
+      isEdge: boolean;
+      baseA: number;
+      r: number;
+
+      constructor(edgeBias: boolean) {
+        if (edgeBias) {
+          const side = Math.random() < 0.5 ? 0 : 1;
+          this.x = side === 0
+            ? Math.random() * W * 0.32
+            : W - Math.random() * W * 0.32;
+        } else {
+          this.x = Math.random() * W;
+        }
+        this.y = Math.random() * H;
+        const speedMult = isMobile ? 0.34 : 0.8;
+        this.vx = (Math.random() - 0.5) * speedMult;
+        this.vy = (Math.random() - 0.5) * speedMult;
+        this.ph = Math.random() * Math.PI * 2;
+
+        const edgeDist = Math.min(this.x, W - this.x) / (W * 0.5);
+        this.isTeal = Math.random() < 0.5;
+        this.isEdge = edgeDist < 0.35;
+        this.baseA = this.isEdge
+          ? Math.random() * 0.15 + 0.85
+          : Math.random() * 0.2 + 0.65;
+
+        const sizeMult = isMobile ? 1.4 : 1.2;
+        this.r = this.isEdge
+          ? (Math.random() * 2.8 + 1.8) * sizeMult
+          : (Math.random() * 2.2 + 1.4) * sizeMult;
+      }
+
+      tick() {
+        this.ph += isMobile ? 0.018 : 0.04;
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.x < -5) this.x = W + 5;
+        if (this.x > W + 5) this.x = -5;
+        if (this.y < -5) this.y = H + 5;
+        if (this.y > H + 5) this.y = -5;
+
+        if (mx !== null) {
+          const dx = mx - this.x;
+          const dy = my - this.y;
+          const d = Math.hypot(dx, dy);
+          if (d < 180) {
+            const f = (180 - d) / 180;
+            this.x += dx * f * 0.009;
+            this.y += dy * f * 0.009;
+          }
+        }
+      }
+
+      draw() {
+        const a = Math.min(1, this.baseA + Math.sin(this.ph) * 0.08);
+        const h = this.isTeal ? 185 : 265;
+
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${h}, 100%, 72%, ${a})`;
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.r * 0.55, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${h}, 100%, 96%, ${Math.min(1, a * 1.4)})`;
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.r * 0.25, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${h}, 100%, 100%, ${Math.min(1, a * 1.5)})`;
+        ctx.fill();
+      }
+    }
+
+    function connect() {
+      const md = isMobile ? 120 : 160;
+      const mds = md * md;
+
+      for (let i = 0; i < dots.length; i++) {
+        let c = 0;
+        for (let j = i + 1; j < dots.length; j++) {
+          if (c > (isMobile ? 4 : 8)) break;
+          const dx = dots[i].x - dots[j].x;
+          const dy = dots[i].y - dots[j].y;
+          const ds = dx * dx + dy * dy;
+          if (ds < mds) {
+            const dist = Math.sqrt(ds);
+            const base = 1 - dist / md;
+            const isEdge = dots[i].isEdge || dots[j].isEdge;
+            const a = base * (isEdge ? 0.5 : 0.28);
+            const isTeal = dots[i].isTeal && dots[j].isTeal;
+            const isPurple = !dots[i].isTeal && !dots[j].isTeal;
+            const color = isTeal
+              ? `rgba(6,182,212,${a})`
+              : isPurple
+              ? `rgba(139,92,246,${a})`
+              : `rgba(100,130,240,${a})`;
+            ctx.strokeStyle = color;
+            ctx.lineWidth = isMobile ? 0.5 : 0.55;
+            ctx.beginPath();
+            ctx.moveTo(dots[i].x, dots[i].y);
+            ctx.lineTo(dots[j].x, dots[j].y);
+            ctx.stroke();
+            c++;
+          }
+        }
+      }
+
+      if (mx === null || my === null) return;
+      const mouseRange = isMobile ? 150 : 220;
+      for (const d of dots) {
+        const dx = mx - d.x;
+        const dy = my - d.y;
+        const dist = Math.hypot(dx, dy);
+        if (dist < mouseRange) {
+          const a = (1 - dist / mouseRange) * 0.7;
+          const h = d.isTeal ? 185 : 265;
+          ctx.strokeStyle = `hsla(${h}, 100%, 72%, ${a})`;
+          ctx.lineWidth = isMobile ? 0.6 : 0.8;
+          ctx.beginPath();
+          ctx.moveTo(mx, my);
+          ctx.lineTo(d.x, d.y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    function drawVignette() {
+      const g = ctx.createRadialGradient(W / 2, H / 2, H * 0.08, W / 2, H / 2, H * 0.72);
+      g.addColorStop(0, 'rgba(8,13,26,0)');
+      g.addColorStop(1, 'rgba(4,7,16,0.55)');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, W, H);
+    }
+
+    function init() {
+      dots = [];
+      const total = isMobile ? 80 : 250;
+      const edgeCount = Math.floor(total * 0.6);
+      for (let i = 0; i < edgeCount; i++) dots.push(new Dot(true));
+      for (let i = edgeCount; i < total; i++) dots.push(new Dot(false));
+    }
+
+    function loop() {
+      ctx.fillStyle = 'rgba(8,13,26,0.18)';
+      ctx.fillRect(0, 0, W, H);
+      connect();
+      for (const d of dots) { d.tick(); d.draw(); }
+      drawVignette();
+      animFrame = requestAnimationFrame(loop);
+    }
+
+    resize();
+    loop();
+
+    return () => {
+      cancelAnimationFrame(animFrame);
+      window.removeEventListener('resize', resize);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        zIndex: 0,
+      }}
+    />
+  );
+};
+
+// ===== Hero Component =====
 const Hero = () => {
-  const videoRef = useRef<HTMLVideoElement>(null);
   const { ref: heroRef, isIntersecting } = useIntersectionObserver({
     threshold: 0.3,
     rootMargin: '-50px'
   });
-
-  useEffect(() => {
-    if (videoRef.current) {
-      // Try to play the video
-      videoRef.current.play().catch(error => {
-        console.error('Failed to play video:', error);
-      });
-    }
-  }, []);
 
   const scrollToProjects = () => {
     document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <section
-      ref={heroRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-secondary pt-24 sm:pt-8"
-    >
-      {/* Background Video */}
-      <video
-        ref={videoRef}
-        className="absolute inset-0 w-full h-full object-cover z-0"
-        style={{
-          zIndex: 0,
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover'
-        }}
-        playsInline
-        autoPlay
-        loop
-        muted
-        preload="auto"
+<section
+  ref={heroRef}
+  className="relative min-h-[85vh] sm:min-h-screen flex items-center justify-center overflow-hidden bg-[#080d1a] pt-24 pb-24 sm:pt-8 sm:pb-0 sm:px-0"
+>
+      {/* Neural Network Background - REPLACES VIDEO */}
+      <NeuralBackground />
 
-        onError={(e) => {
-          console.error('Video failed to load:', e);
-          console.error('Video error details:', videoRef.current?.error);
-          // Fallback to background image if video fails
-          const videoElement = e.target as HTMLVideoElement;
-          videoElement.style.display = 'none';
-          const fallbackImage = document.createElement('div');
-          fallbackImage.className = 'absolute inset-0 w-full h-full bg-cover bg-center';
-          videoElement.parentNode?.appendChild(fallbackImage);
-        }}
-      >
-        <source src="/hero-bg.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
       {/* Overlay */}
-      <div className="absolute inset-0 bg-background/50 z-10" />
+      {/* <div className="absolute inset-0 bg-background/50 z-10" /> */}
 
       {/* Content */}
-      <div className="relative z-10 text-center max-w-4xl mx-auto px-6">
+      <div className="relative z-20 text-center max-w-4xl mx-auto px-6">
         <div className={`transition-all duration-700 ease-out ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
           {/* Profile Photo */}
           <div className={`mb-6 flex justify-center transition-all duration-800 ease-out delay-150 ${isIntersecting ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
@@ -76,7 +258,6 @@ const Hero = () => {
                   alt="Profile"
                   className="w-full h-full object-cover"
                   onError={(e) => {
-                    // Fallback إذا لم توجد الصورة
                     const target = e.target as HTMLImageElement;
                     target.style.display = 'none';
                     target.nextElementSibling?.classList.remove('hidden');
@@ -132,8 +313,6 @@ const Hero = () => {
               Contact Me
             </Button>
           </div>
-
-
         </div>
       </div>
     </section>
