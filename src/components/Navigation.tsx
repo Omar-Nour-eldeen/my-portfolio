@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Download, ChevronDown } from "lucide-react";
-import LogoSimple from "./LogoSimple";
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -78,9 +77,14 @@ const Navigation = () => {
       scrolled ? 'bg-background/80 backdrop-blur-md border-b border-border/50' : 'bg-transparent'
     }`}>
       <div className="max-w-6xl mx-auto px-6">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo with Profile Photo */}
-          <LogoSimple size="sm" showTagline={false} clickable={true} />
+        <div className="flex items-center justify-between h-24">
+          {/* Logo Image */}
+          <div 
+            onClick={() => document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' })}
+            className="flex items-center cursor-pointer hover:opacity-85 hover:scale-105 active:scale-95 transition-all duration-300"
+          >
+            <img src="/logo.png" alt="Logo" className="h-20 ms-5" />
+          </div>
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
