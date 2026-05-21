@@ -53,8 +53,8 @@ const Navigation = () => {
   const handleResumeDownload = () => {
     // Create a link element to trigger download
     const link = document.createElement('a');
-    link.href = '/omar-nour-resume.pdf';
-    link.download = 'Omar-Nour-Resume.pdf';
+    link.href = '/Omar Nour Eldeen_CV.pdf';
+    link.download = 'Omar Nour Eldeen_CV.pdf';
     link.target = '_blank';
     
     // Append to body, click, and remove
@@ -153,7 +153,7 @@ const Navigation = () => {
               className="bg-gradient-primary hover:shadow-glow hover:scale-105 transition-all duration-300"
             >
               <Download className="w-4 h-4 mr-2" />
-              Resume
+              Download CV
             </Button>
           </div>
           
@@ -217,7 +217,7 @@ const Navigation = () => {
                 className="block px-3 py-2 text-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300 w-full text-left rounded-md flex items-center"
               >
                 <Download className="w-4 h-4 mr-2" />
-                Resume
+                Download CV
               </button>
             </div>
           </div>
