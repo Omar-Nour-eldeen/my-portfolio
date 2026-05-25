@@ -36,30 +36,13 @@ const LogoSimple = ({ className, size = "md", showTagline = true, clickable = fa
       )}
       onClick={handleClick}
     >
-      {/* Logo Icon */}
-      <div className={cn(
-        "relative bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center shadow-glow transition-all duration-300",
-        clickable && "hover:shadow-glow-lg hover:scale-110",
-        iconSizes[size]
-      )}>
-        <span className="text-primary-foreground font-bold text-xs">ON</span>
-        
-        {/* Decorative dots */}
-        <div
-          className={cn(
-            "absolute -top-0.5 -right-0.5 w-2 h-2 bg-accent rounded-full animate-pulse transition-all duration-300",
-            clickable && "hover:scale-125 hover:bg-accent/80"
-          )}
-          style={{ animationDuration: '1s' }}
-        />
-        <div
-          className={cn(
-            "absolute -bottom-0.5 -left-0.5 w-1.5 h-1.5 bg-primary/60 rounded-full animate-pulse transition-all duration-300",
-            clickable && "hover:scale-125 hover:bg-primary/80"
-          )}
-          style={{ animationDuration: '1s' }}
-        />
-      </div>
+    {/* Logo Image */}
+    <div
+      onClick={() => document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' })}
+      className="flex items-center cursor-pointer hover:opacity-85 hover:scale-105 active:scale-95 transition-all duration-300"
+    >
+      <img src="/logo2.png" alt="Logo" className="h-10" />
+    </div>
 
       {/* Text */}
       <div className="flex flex-col">
