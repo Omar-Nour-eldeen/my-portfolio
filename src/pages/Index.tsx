@@ -1,6 +1,7 @@
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
+import Skills from "@/components/Skills";
 import Education from "@/components/Education";
 import WorkExperience from "@/components/WorkExperience";
 import Services from "@/components/Services";
@@ -21,6 +22,9 @@ const Index = () => {
         </section>
         <section id="about" className="scroll-mt-20 md:scroll-mt-24">
           <About />
+        </section>
+        <section id="skills" className="scroll-mt-20 md:scroll-mt-24">
+          <Skills />
         </section>
         <section id="education" className="scroll-mt-20 md:scroll-mt-24">
           <Education />
