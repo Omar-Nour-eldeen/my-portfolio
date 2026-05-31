@@ -16,7 +16,7 @@ const About = () => {
         </div>
         
         <div className={`grid md:grid-cols-2 gap-12 items-center transition-all duration-700 ease-out delay-200 ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
-          <div>
+          <div className="order-2 md:order-1">
             <h3 className="text-2xl font-semibold mb-6 text-primary hover:scale-105 transition-transform duration-300">
               Passionate about web development
             </h3>
@@ -31,7 +31,7 @@ const About = () => {
             </p>
           </div>
           
-          <div className="relative group max-w-md mx-auto md:max-w-none w-full flex justify-center mt-8 md:mt-0">
+          <div className="relative group max-w-md mx-auto md:max-w-none w-full flex justify-center mt-8 md:mt-0 order-1 md:order-2">
             {/* Ambient Background Glow */}
             <div className="absolute -inset-2 bg-gradient-to-r from-primary via-purple-500 to-accent rounded-3xl blur-xl opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-300" />
             
