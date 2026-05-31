@@ -12,7 +12,7 @@ const Navigation = () => {
       setScrolled(window.scrollY > 50);
       
       // Update active section based on scroll position
-      const sections = ['home', 'about', 'skills', 'education', 'experience', 'services', 'projects', 'achievements', 'testimonials', 'contact'];
+      const sections = ['home', 'about', 'skills', 'education', 'experience', 'services', 'projects', 'testimonials', 'contact'];
       const scrollPosition = window.scrollY + 100; // Offset for better detection
       
       for (let i = sections.length - 1; i >= 0; i--) {
@@ -39,7 +39,6 @@ const Navigation = () => {
   const dropdownItems = [
     { name: 'Education', href: '#education' },
     { name: 'Experience', href: '#experience' },
-    { name: 'Achievements', href: '#achievements' },
     { name: 'Testimonials', href: '#testimonials' },
   ];
 
@@ -112,7 +111,7 @@ const Navigation = () => {
               <button
                 onClick={handleDropdownClick}
                 className={`flex items-center transition-all duration-300 hover:scale-105 ${
-                  ['education', 'experience', 'achievements', 'testimonials'].includes(activeSection)
+                  ['education', 'experience', 'testimonials'].includes(activeSection)
                     ? 'text-primary font-semibold' 
                     : 'text-foreground hover:text-primary'
                 }`}

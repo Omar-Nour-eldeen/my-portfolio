@@ -212,7 +212,7 @@ const Skills = () => {
         {/* Section Header */}
         <div className={`text-center mb-16 transition-all duration-700 ease-out ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
           <h2 className="text-4xl md:text-5xl font-bold mb-6 hover:scale-105 transition-transform duration-300">Skills & Expertise</h2>
-          <div className="w-32 h-1 bg-gradient-primary mx-auto rounded-full hover:w-36 transition-all duration-300" />
+          <div className="w-20 h-1 bg-gradient-primary mx-auto rounded-full hover:w-24 transition-all duration-300" />
           <p className="text-xl text-muted-foreground mt-6 max-w-2xl mx-auto hover:text-foreground transition-colors duration-300">
             A visual overview of the tools, languages, and technologies I specialize in to build high-performance web applications.
           </p>

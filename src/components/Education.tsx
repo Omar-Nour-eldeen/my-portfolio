@@ -10,21 +10,12 @@ const Education = () => {
   const education = [
     {
       degree: "Bachelor’s Degree in Computer Science",
-      institution: "Helwan University",
+      institution: "Capital University",
       period: "2023 – Expected 2027",
       location: "Egypt, Cairo",
       description: "Specialized in Computer science with focus on web development and database systems.",
-      gpa: "3.17/4.0",
-      logo: "/helwan-university.png"
-    },
-    {
-      degree: "Fullstack .NET Web Development Certification (In Progress)",
-      institution: "Digital Egypt Pioneers Initiative - DEPI",
-      period: "2025",
-      location: "Egypt, Cairo",
-      description: "Complete Web Development training covering modern technologies and best practices.",
-      gpa: "Not yet",
-      logo: "/depi-logo.png"
+      gpa: "3.05/4.0 ( Very Good )",
+      logo: "/capital-university.jpg"
     }
   ];
 

@@ -6,7 +6,7 @@ import Education from "@/components/Education";
 import WorkExperience from "@/components/WorkExperience";
 import Services from "@/components/Services";
 import Projects from "@/components/Projects";
-import Achievements from "@/components/Achievements";
+
 import Testimonials from "@/components/Testimonials";
 import Contact from "@/components/Contact";
 import ThankYou from "@/components/ThankYou";
@@ -38,9 +38,7 @@ const Index = () => {
         <section id="projects" className="scroll-mt-20 md:scroll-mt-24">
           <Projects />
         </section>
-        <section id="achievements" className="scroll-mt-20 md:scroll-mt-24">
-          <Achievements />
-        </section>
+
         <section id="testimonials" className="scroll-mt-20 md:scroll-mt-24">
           <Testimonials />
         </section>
