@@ -192,11 +192,17 @@ const NeuralBackground = () => {
     }
 
     function loop() {
-      ctx.fillStyle = 'rgba(8,13,26,0.18)';
-      ctx.fillRect(0, 0, W, H);
-      connect();
-      for (const d of dots) { d.tick(); d.draw(); }
-      drawVignette();
+      if (canvasRef.current) {
+        const rect = canvasRef.current.getBoundingClientRect();
+        // Only draw if the canvas is within the viewport or slightly above/below it
+        if (rect.bottom > 0 && rect.top < window.innerHeight) {
+          ctx.fillStyle = 'rgba(8,13,26,0.18)';
+          ctx.fillRect(0, 0, W, H);
+          connect();
+          for (const d of dots) { d.tick(); d.draw(); }
+          drawVignette();
+        }
+      }
       animFrame = requestAnimationFrame(loop);
     }
 

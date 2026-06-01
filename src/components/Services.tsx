@@ -45,7 +45,7 @@ const Services = () => {
   return (
     <section ref={servicesRef} className="py-20 px-6 bg-gradient-secondary">
       <div className="max-w-6xl mx-auto">
-        <div className={`text-center mb-16 transition-all duration-700 ease-out ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+        <div className={`text-center mb-16 transform-gpu will-change-transform transition-all duration-700 ease-out ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
           <h2 className="text-4xl md:text-5xl font-bold mb-6 hover:scale-105 transition-transform duration-300">Services I Offer</h2>
           <div className="w-20 h-1 bg-gradient-primary mx-auto rounded-full hover:w-24 transition-all duration-300" />
           <p className="text-xl text-muted-foreground mt-6 max-w-2xl mx-auto hover:text-foreground transition-colors duration-300">
@@ -53,7 +53,7 @@ const Services = () => {
           </p>
         </div>
         
-        <div className={`grid md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-700 ease-out delay-200 ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+        <div className={`grid md:grid-cols-2 lg:grid-cols-3 gap-8 transform-gpu will-change-transform transition-all duration-700 ease-out ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
           {services.map((service, index) => (
             <Card 
               key={index}

@@ -51,11 +51,11 @@ const Projects = () => {
           </p>
         </div>
 
-        <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-700 ease-out delay-200 ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+        <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transform-gpu will-change-transform transition-all duration-700 ease-out ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
           {projects.map((project, index) => (
             <Card
               key={index}
-              className="group overflow-hidden bg-card/50 backdrop-blur-sm border-border/50 hover:shadow-elegant transition-all duration-300 hover:-translate-y-2 bg-gray-800"
+              className="group overflow-hidden bg-gray-800 md:bg-card/50 md:backdrop-blur-sm backdrop-blur-none border-border/50 hover:shadow-elegant transition-all duration-300 hover:-translate-y-2"
             >
               <div className="relative overflow-hidden">
                 <img

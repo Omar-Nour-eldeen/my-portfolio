@@ -15,7 +15,7 @@ const ThankYou = () => {
   return (
     <section ref={thankYouRef} className="py-20 px-6 bg-gradient-secondary">
       <div className="max-w-4xl mx-auto text-center">
-        <div className={`mb-12 transition-all duration-700 ease-out ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+        <div className={`mb-12 transform-gpu will-change-transform transition-all duration-700 ease-out ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
           <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6 hover:bg-primary/30 transition-colors duration-300">
             <Heart className="w-10 h-10 text-primary" />
           </div>
@@ -35,7 +35,7 @@ const ThankYou = () => {
           </p>
         </div>
         
-        <div className={`grid md:grid-cols-3 gap-8 mb-12 transition-all duration-700 ease-out delay-200 ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+        <div className={`grid md:grid-cols-3 gap-8 mb-12 transform-gpu will-change-transform transition-all duration-700 ease-out ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
           <div className="text-center">
             <a 
               href="mailto:mr4110140@gmail.com"
@@ -80,7 +80,7 @@ const ThankYou = () => {
           </div>
         </div>
         
-        <div className={`flex flex-col sm:flex-row gap-4 justify-center transition-all duration-700 ease-out delay-400 ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+        <div className={`flex flex-col sm:flex-row gap-4 justify-center transform-gpu will-change-transform transition-all duration-700 ease-out ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
           <Button 
             onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
             className="bg-gradient-primary hover:shadow-glow hover:scale-105 transition-all duration-300"

@@ -33,7 +33,7 @@ const ExperienceCard = ({ item }: { item: ExperienceItem }) => {
       <div className="relative rounded-2xl p-[1px] bg-gradient-to-br from-primary via-purple-500 to-accent group-hover:-translate-y-2 transition-all duration-500">
 
         {/* Glassmorphic Card Container */}
-        <div className="relative overflow-hidden bg-slate-900 backdrop-blur-xl rounded-2xl hover:shadow-elegant transition-all duration-500">
+        <div className="relative overflow-hidden bg-slate-900/95 md:backdrop-blur-xl backdrop-blur-none rounded-2xl hover:shadow-elegant transition-all duration-500">
           {/* Interactive Glassmorphic Shine Effect */}
           <div className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out pointer-events-none" />
 
@@ -176,7 +176,7 @@ const WorkExperience = () => {
       period: "2025 – Present",
       location: "Remote",
       description: "Developing custom web applications and websites for clients, focusing on responsive design, backend integration, and scalable solutions.",
-      technologies: ["TypeScript", "Tailwind CSS", "Supabase", "Bootstrap", "JavaScript", "CSS3", "HTML5", "Git", "GitHub" , "Canva"],
+      technologies: ["TypeScript", "Tailwind CSS", "Supabase", "Bootstrap", "JavaScript", "CSS3", "HTML5", "Git", "GitHub", "Canva"],
       achievements: [
         "Developed custom websites for clients based on business requirements",
         "Designed and delivered marketing materials and brochures",
@@ -234,11 +234,11 @@ const WorkExperience = () => {
   return (
     <section ref={experienceRef} className="py-20 px-6 bg-gradient-secondary relative overflow-hidden">
       {/* Decorative background gradients */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="hidden md:block absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="hidden md:block absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-6xl mx-auto relative z-10">
-        <div className={`text-center mb-16 transition-all duration-700 ease-out ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+        <div className={`text-center mb-16 transform-gpu will-change-transform transition-all duration-700 ease-out ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
           <h2 className="text-4xl md:text-5xl font-bold mb-6 hover:scale-105 transition-transform duration-300">Internships & Work Experience</h2>
           <div className="w-20 h-1 bg-gradient-primary mx-auto rounded-full hover:w-24 transition-all duration-300" />
           <p className="text-xl text-muted-foreground mt-6 max-w-2xl mx-auto hover:text-foreground transition-colors duration-300">
@@ -246,7 +246,7 @@ const WorkExperience = () => {
           </p>
         </div>
 
-        <div className={`space-y-8 transition-all duration-700 ease-out delay-200 ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+        <div className={`space-y-8 transform-gpu will-change-transform transition-all duration-700 ease-out ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
           {experience.map((item, index) => (
             <ExperienceCard key={index} item={item} />
           ))}

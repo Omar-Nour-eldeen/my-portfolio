@@ -8,22 +8,30 @@ const Navigation = () => {
   const [activeSection, setActiveSection] = useState('home');
 
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-      
-      // Update active section based on scroll position
-      const sections = ['home', 'about', 'skills', 'education', 'experience', 'services', 'projects', 'testimonials', 'contact'];
-      const scrollPosition = window.scrollY + 100; // Offset for better detection
-      
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const section = document.getElementById(sections[i]);
-        if (section && section.offsetTop <= scrollPosition) {
-          setActiveSection(sections[i]);
-          break;
-        }
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 50);
+          
+          // Update active section based on scroll position
+          const sections = ['home', 'about', 'skills', 'education', 'experience', 'services', 'projects', 'testimonials', 'contact'];
+          const scrollPosition = window.scrollY + 100; // Offset for better detection
+          
+          for (let i = sections.length - 1; i >= 0; i--) {
+            const section = document.getElementById(sections[i]);
+            if (section && section.offsetTop <= scrollPosition) {
+              setActiveSection(sections[i]);
+              break;
+            }
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 

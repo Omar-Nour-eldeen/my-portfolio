@@ -18,6 +18,11 @@ export const useIntersectionObserver = (
     const element = ref.current;
     if (!element) return;
 
+    // Mobile fix: Lower threshold and increase rootMargin on mobile to ensure tall elements trigger
+    const isMobile = window.innerWidth < 768;
+    const effectiveThreshold = isMobile ? Math.min(threshold, 0.05) : threshold;
+    const effectiveRootMargin = isMobile ? '50px' : rootMargin;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -30,8 +35,8 @@ export const useIntersectionObserver = (
         }
       },
       {
-        threshold,
-        rootMargin,
+        threshold: effectiveThreshold,
+        rootMargin: effectiveRootMargin,
       }
     );
 
