@@ -3,6 +3,10 @@ import { Github, Linkedin, Mail, Phone, Twitter, MapPin } from "lucide-react";
 import LogoSimple from "./LogoSimple";
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 
+const MostaqlIcon = ({ className }: { className?: string }) => (
+  <img src="/mostaql.png" alt="Mostaql" className={`rounded-[4px] object-contain ${className}`} />
+);
+
 const Footer = () => {
   const { ref: footerRef, isIntersecting } = useIntersectionObserver({
     threshold: 0.2,
@@ -14,6 +18,7 @@ const Footer = () => {
   const socialLinks = [
     { icon: Github, href: "https://github.com/Omar-Nour-eldeen", label: "GitHub" },
     { icon: Linkedin, href: "https://www.linkedin.com/in/omar-nour-eldeen/", label: "LinkedIn" },
+    { icon: MostaqlIcon, href: "https://mostaql.com/u/Omar_Nour_elden", label: "Mostaql" },
     { icon: Mail, href: "mailto:mr4110140@gmail.com", label: "Email" },
   ];
 
@@ -51,7 +56,7 @@ const Footer = () => {
                   className="hover:shadow-glow transition-all duration-300"
                   asChild
                 >
-                  <a href={social.href} aria-label={social.label}>
+                  <a href={social.href} aria-label={social.label} target="_blank" rel="noopener noreferrer">
                     <social.icon className="h-4 w-4" />
                   </a>
                 </Button>

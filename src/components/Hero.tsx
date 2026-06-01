@@ -297,6 +297,11 @@ const Hero = () => {
               </a>
             </Button>
             <Button variant="outline" size="icon" className="hover:shadow-glow hover:scale-110 transition-all duration-300" asChild>
+              <a href="https://mostaql.com/u/Omar_Nour_elden" target="_blank" rel="noopener noreferrer" aria-label="Mostaql">
+                <img src="/mostaql.png" alt="Mostaql" className="h-5 w-5 object-contain rounded-[5px]" />
+              </a>
+            </Button>
+            <Button variant="outline" size="icon" className="hover:shadow-glow hover:scale-110 transition-all duration-300" asChild>
               <a href="mailto:mr4110140@gmail.com" aria-label="Email">
                 <Mail className="h-5 w-5" />
               </a>
