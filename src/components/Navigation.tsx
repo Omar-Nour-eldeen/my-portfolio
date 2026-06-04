@@ -14,11 +14,11 @@ const Navigation = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
           setScrolled(window.scrollY > 50);
-          
+
           // Update active section based on scroll position
-          const sections = ['home', 'about', 'skills', 'education', 'experience', 'services', 'projects', 'testimonials', 'contact'];
+          const sections = ['home', 'about', 'skills', 'services', 'projects', 'experience', 'education', 'testimonials', 'contact', 'thankyou'];
           const scrollPosition = window.scrollY + 100; // Offset for better detection
-          
+
           for (let i = sections.length - 1; i >= 0; i--) {
             const section = document.getElementById(sections[i]);
             if (section && section.offsetTop <= scrollPosition) {
@@ -45,8 +45,8 @@ const Navigation = () => {
   ];
 
   const dropdownItems = [
+    { name: 'Work Experience', href: '#experience' },
     { name: 'Education', href: '#education' },
-    { name: 'Experience', href: '#experience' },
     { name: 'Testimonials', href: '#testimonials' },
   ];
 
@@ -64,7 +64,7 @@ const Navigation = () => {
     link.href = '/Omar Nour Eldeen_CV.pdf';
     link.download = 'Omar Nour Eldeen_CV.pdf';
     link.target = '_blank';
-    
+
     // Append to body, click, and remove
     document.body.appendChild(link);
     link.click();
@@ -81,9 +81,10 @@ const Navigation = () => {
   };
 
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-      scrolled ? 'bg-background/80 backdrop-blur-md border-b border-border/50' : 'bg-transparent'
-    }`}>
+    <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled
+        ? 'bg-slate-950/80 backdrop-blur-xl border-b border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.4)]'
+        : 'bg-transparent'
+      }`}>
       <div className="max-w-6xl mx-auto px-6">
         <div className="flex items-center justify-between h-20 sm:h-24">
           {/* Logo Image */}
@@ -93,7 +94,7 @@ const Navigation = () => {
           >
             <img src="/logo.png" alt="Logo" className="h-16 sm:h-20 ms-5" />
           </div>
-          
+
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => {
@@ -103,34 +104,36 @@ const Navigation = () => {
                 <button
                   key={item.name}
                   onClick={() => scrollToSection(item.href)}
-                  className={`transition-all duration-300 hover:scale-105 ${
-                    isActive 
-                      ? 'text-primary font-semibold' 
-                      : 'text-foreground hover:text-primary'
-                  }`}
+                  className={`relative transition-all duration-300 pb-1 ${isActive
+                      ? 'text-primary font-semibold'
+                      : 'text-white/70 hover:text-white'
+                    }`}
                 >
                   {item.name}
+                  <span className={`absolute bottom-0 left-0 h-0.5 bg-gradient-primary rounded-full transition-all duration-300 ${isActive ? 'w-full' : 'w-0'
+                    }`} />
                 </button>
               );
             })}
-            
+
             {/* Dropdown Menu */}
             <div className="relative">
               <button
                 onClick={handleDropdownClick}
-                className={`flex items-center transition-all duration-300 hover:scale-105 ${
-                  ['education', 'experience', 'testimonials'].includes(activeSection)
-                    ? 'text-primary font-semibold' 
-                    : 'text-foreground hover:text-primary'
-                }`}
+                className={`relative flex items-center pb-1 transition-all duration-300 ${['education', 'experience', 'testimonials'].includes(activeSection)
+                    ? 'text-primary font-semibold'
+                    : 'text-white/70 hover:text-white'
+                  }`}
               >
                 More
                 <ChevronDown className={`w-4 h-4 ml-1 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                <span className={`absolute bottom-0 left-0 h-0.5 bg-gradient-primary rounded-full transition-all duration-300 ${['education', 'experience', 'testimonials'].includes(activeSection) ? 'w-full' : 'w-0'
+                  }`} />
               </button>
-              
+
               {isDropdownOpen && (
-                <div className="absolute top-full left-0 mt-2 w-48 bg-background/95 backdrop-blur-md border border-border/50 rounded-lg shadow-lg z-50">
-                  <div className="py-2">
+                <div className="absolute top-full left-0 mt-2 w-48 bg-slate-950/90 backdrop-blur-xl border border-white/10 rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] z-50 overflow-hidden">
+                  <div className="py-1.5">
                     {dropdownItems.map((item) => {
                       const sectionId = item.href.replace('#', '');
                       const isActive = activeSection === sectionId;
@@ -138,11 +141,10 @@ const Navigation = () => {
                         <button
                           key={item.name}
                           onClick={() => handleDropdownItemClick(item.href)}
-                          className={`block w-full text-left px-4 py-2 transition-all duration-300 ${
-                            isActive
+                          className={`block w-full text-left px-4 py-2.5 transition-all duration-300 text-sm ${isActive
                               ? 'text-primary bg-primary/10 font-semibold'
-                              : 'text-foreground hover:text-primary hover:bg-primary/10'
-                          }`}
+                              : 'text-white/70 hover:text-white hover:bg-white/5'
+                            }`}
                         >
                           {item.name}
                         </button>
@@ -152,19 +154,18 @@ const Navigation = () => {
                 </div>
               )}
             </div>
-            
+
             {/* Resume Download Button */}
             <Button
               onClick={handleResumeDownload}
-              variant="outline"
               size="sm"
-              className="bg-gradient-primary hover:shadow-glow hover:scale-105 transition-all duration-300"
+              className="h-9 px-4 text-sm font-bold bg-gradient-primary text-white border-0 shadow-[0_0_16px_rgba(99,102,241,0.3)] hover:shadow-[0_0_24px_rgba(99,102,241,0.5)] hover:-translate-y-0.5 active:scale-95 transition-all duration-300 rounded-xl"
             >
               <Download className="w-4 h-4 mr-2" />
               Download CV
             </Button>
           </div>
-          
+
           {/* Mobile Navigation */}
           <div className="md:hidden">
             <Button
@@ -177,7 +178,7 @@ const Navigation = () => {
             </Button>
           </div>
         </div>
-        
+
         {/* Mobile Menu */}
         {isOpen && (
           <div className="md:hidden bg-background/95 backdrop-blur-md border-t border-border/50">
@@ -189,17 +190,16 @@ const Navigation = () => {
                   <button
                     key={item.name}
                     onClick={() => scrollToSection(item.href)}
-                    className={`block px-3 py-2 transition-all duration-300 w-full text-left rounded-md ${
-                      isActive
+                    className={`block px-3 py-2 transition-all duration-300 w-full text-left rounded-md ${isActive
                         ? 'text-primary bg-primary/10 font-semibold'
                         : 'text-foreground hover:text-primary hover:bg-primary/10'
-                    }`}
+                      }`}
                   >
                     {item.name}
                   </button>
                 );
               })}
-              
+
               {/* Mobile Dropdown Items */}
               {dropdownItems.map((item) => {
                 const sectionId = item.href.replace('#', '');
@@ -208,17 +208,16 @@ const Navigation = () => {
                   <button
                     key={item.name}
                     onClick={() => scrollToSection(item.href)}
-                    className={`block px-3 py-2 transition-all duration-300 w-full text-left rounded-md ${
-                      isActive
+                    className={`block px-3 py-2 transition-all duration-300 w-full text-left rounded-md ${isActive
                         ? 'text-primary bg-primary/10 font-semibold'
                         : 'text-foreground hover:text-primary hover:bg-primary/10'
-                    }`}
+                      }`}
                   >
                     {item.name}
                   </button>
                 );
               })}
-              
+
               {/* Mobile Resume Download Button */}
               <button
                 onClick={handleResumeDownload}
@@ -230,7 +229,7 @@ const Navigation = () => {
             </div>
           </div>
         )}
-        
+
 
       </div>
     </nav>

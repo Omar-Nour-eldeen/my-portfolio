@@ -48,19 +48,22 @@ const Footer = () => {
 
             {/* Social Links */}
             <div className="flex gap-3 mt-6">
-              {socialLinks.map((social) => (
-                <Button
-                  key={social.label}
-                  variant="outline"
-                  size="icon"
-                  className="hover:shadow-glow transition-all duration-300"
-                  asChild
-                >
-                  <a href={social.href} aria-label={social.label} target="_blank" rel="noopener noreferrer">
-                    <social.icon className="h-4 w-4" />
-                  </a>
-                </Button>
-              ))}
+              <a href="https://github.com/Omar-Nour-eldeen" target="_blank" rel="noopener noreferrer" aria-label="GitHub"
+                 className="w-10 h-10 rounded-full bg-white/5 border-2 border-purple-500 hover:bg-purple-500/20 hover:shadow-[0_0_16px_rgba(168,85,247,0.5)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center text-white/90 hover:text-white">
+                <Github className="h-4 w-4" />
+              </a>
+              <a href="https://www.linkedin.com/in/omar-nour-eldeen/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"
+                 className="w-10 h-10 rounded-full bg-white/5 border-2 border-emerald-500 hover:bg-emerald-500/20 hover:shadow-[0_0_16px_rgba(16,185,129,0.5)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center text-white/90 hover:text-white">
+                <Linkedin className="h-4 w-4" />
+              </a>
+              <a href="https://mostaql.com/u/Omar_Nour_elden" target="_blank" rel="noopener noreferrer" aria-label="Mostaql"
+                 className="w-10 h-10 rounded-full bg-white/5 border-2 border-blue-500 hover:bg-blue-500/20 hover:shadow-[0_0_16px_rgba(59,130,246,0.5)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center text-white/90 hover:text-white">
+                <MostaqlIcon className="h-4 w-4" />
+              </a>
+              <a href="mailto:mr4110140@gmail.com" aria-label="Email"
+                 className="w-10 h-10 rounded-full bg-white/5 border-2 border-orange-500 hover:bg-orange-500/20 hover:shadow-[0_0_16px_rgba(249,115,22,0.5)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center text-white/90 hover:text-white">
+                <Mail className="h-4 w-4" />
+              </a>
             </div>
           </div>
 

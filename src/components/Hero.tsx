@@ -143,8 +143,8 @@ const NeuralBackground = () => {
             const color = isTeal
               ? `rgba(6,182,212,${a})`
               : isPurple
-              ? `rgba(139,92,246,${a})`
-              : `rgba(100,130,240,${a})`;
+                ? `rgba(139,92,246,${a})`
+                : `rgba(100,130,240,${a})`;
             ctx.strokeStyle = color;
             ctx.lineWidth = isMobile ? 0.5 : 0.55;
             ctx.beginPath();
@@ -242,10 +242,10 @@ const Hero = () => {
   };
 
   return (
-<section
-  ref={heroRef}
-  className="relative min-h-[85vh] sm:min-h-screen flex items-center justify-center overflow-hidden bg-[#080d1a] pt-24 pb-24 sm:pt-8 sm:pb-0 sm:px-0"
->
+    <section
+      ref={heroRef}
+      className="relative min-h-[85vh] sm:min-h-screen flex items-center justify-center overflow-hidden bg-[#080d1a] pt-24 pb-24 sm:pt-8 sm:pb-0 sm:px-0"
+    >
       {/* Neural Network Background - REPLACES VIDEO */}
       <NeuralBackground />
 
@@ -291,36 +291,38 @@ const Hero = () => {
           </p>
 
           {/* Social Links */}
-          <div className={`flex gap-4 justify-center mb-8 transition-all duration-700 ease-out delay-600 ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
-            <Button variant="outline" size="icon" className="hover:shadow-glow hover:scale-110 transition-all duration-300" asChild>
-              <a href="https://github.com/Omar-Nour-eldeen" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-                <Github className="h-5 w-5" />
-              </a>
-            </Button>
-            <Button variant="outline" size="icon" className="hover:shadow-glow hover:scale-110 transition-all duration-300" asChild>
-              <a href="https://www.linkedin.com/in/omar-nour-eldeen/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                <Linkedin className="h-5 w-5" />
-              </a>
-            </Button>
-            <Button variant="outline" size="icon" className="hover:shadow-glow hover:scale-110 transition-all duration-300" asChild>
-              <a href="https://mostaql.com/u/Omar_Nour_elden" target="_blank" rel="noopener noreferrer" aria-label="Mostaql">
-                <img src="/mostaql.png" alt="Mostaql" className="h-5 w-5 object-contain rounded-[5px]" />
-              </a>
-            </Button>
-            <Button variant="outline" size="icon" className="hover:shadow-glow hover:scale-110 transition-all duration-300" asChild>
-              <a href="mailto:mr4110140@gmail.com" aria-label="Email">
-                <Mail className="h-5 w-5" />
-              </a>
-            </Button>
+          <div className={`flex gap-4 justify-center mb-10 transition-all duration-700 ease-out delay-600 ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+            <a href="https://github.com/Omar-Nour-eldeen" target="_blank" rel="noopener noreferrer" aria-label="GitHub"
+               className="w-12 h-12 rounded-full bg-white/5 border-2 border-purple-500 hover:bg-purple-500/20 hover:shadow-[0_0_20px_rgba(168,85,247,0.5)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center text-white/90 hover:text-white">
+              <Github className="h-5 w-5" />
+            </a>
+            <a href="https://www.linkedin.com/in/omar-nour-eldeen/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"
+               className="w-12 h-12 rounded-full bg-white/5 border-2 border-emerald-500 hover:bg-emerald-500/20 hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center text-white/90 hover:text-white">
+              <Linkedin className="h-5 w-5" />
+            </a>
+            <a href="https://mostaql.com/u/Omar_Nour_elden" target="_blank" rel="noopener noreferrer" aria-label="Mostaql"
+               className="w-12 h-12 rounded-full bg-white/5 border-2 border-blue-500 hover:bg-blue-500/20 hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center text-white/90 hover:text-white">
+              <img src="/mostaql.png" alt="Mostaql" className="h-5 w-5 object-contain rounded-[5px]" />
+            </a>
+            <a href="mailto:mr4110140@gmail.com" aria-label="Email"
+               className="w-12 h-12 rounded-full bg-white/5 border-2 border-orange-500 hover:bg-orange-500/20 hover:shadow-[0_0_20px_rgba(249,115,22,0.5)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center text-white/90 hover:text-white">
+              <Mail className="h-5 w-5" />
+            </a>
           </div>
 
           {/* Action Buttons */}
           <div className={`flex flex-col sm:flex-row gap-4 justify-center transition-all duration-700 ease-out delay-750 ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
-            <Button onClick={scrollToProjects} className="w-full sm:flex-1 sm:max-w-40 h-14 bg-transparent border-2 border-primary/30 hover:border-primary hover:bg-primary/20 hover:shadow-glow hover:scale-105 transition-all duration-300 text-primary hover:text-white">
+            <Button 
+              onClick={scrollToProjects} 
+              className="w-full sm:flex-1 sm:max-w-[180px] h-14 text-base font-bold bg-gradient-primary text-white border-0 shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_30px_rgba(99,102,241,0.5)] hover:-translate-y-1 active:scale-95 transition-all duration-300 rounded-xl"
+            >
               View Projects
-              <ArrowDown className="ml-2 h-4 w-4" />
+              <ArrowDown className="ml-2 h-4 w-4 animate-bounce" />
             </Button>
-            <Button onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })} className="w-full sm:flex-1 sm:max-w-40 h-14 bg-transparent border-2 border-accent/30 hover:border-accent hover:bg-accent/20 hover:shadow-glow hover:scale-105 transition-all duration-300 text-accent hover:text-white">
+            <Button 
+              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })} 
+              className="w-full sm:flex-1 sm:max-w-[180px] h-14 text-base font-bold bg-slate-900/60 backdrop-blur-md border border-white/10 hover:border-white/30 text-white hover:bg-white/10 hover:shadow-xl hover:-translate-y-1 active:scale-95 transition-all duration-300 rounded-xl"
+            >
               Contact Me
             </Button>
           </div>

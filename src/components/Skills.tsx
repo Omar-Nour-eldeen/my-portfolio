@@ -214,11 +214,12 @@ const Skills = () => {
                 key={skill.name}
                 onMouseEnter={() => setHoveredIdx(idx)}
                 onMouseLeave={() => setHoveredIdx(null)}
-                className="p-6 bg-slate-900/40 md:backdrop-blur-xl backdrop-blur-none border flex flex-col items-center justify-center text-center gap-4 group hover:scale-[1.03] hover:-translate-y-2 transition-all duration-500 ease-out cursor-default overflow-hidden relative"
+                className="p-6 bg-slate-900/40 md:backdrop-blur-xl backdrop-blur-none border-2 flex flex-col items-center justify-center text-center gap-4 group hover:scale-[1.03] hover:-translate-y-2 transition-all duration-500 ease-out cursor-default overflow-hidden relative"
                 style={{
-                  borderColor: isHovered
-                    ? `${skill.brandColor}80`
-                    : `${skill.brandColor}80`,
+                  borderColor: `${skill.brandColor}`,
+                  backgroundColor: isHovered 
+                    ? `${skill.brandColor}08` 
+                    : undefined,
                   boxShadow: isHovered
                     ? `0 20px 40px -15px rgba(0,0,0,0.7), 0 0 30px ${skill.glow}`
                     : 'none',
@@ -231,7 +232,13 @@ const Skills = () => {
                 <div className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out pointer-events-none" />
 
                 {/* Skill Logo Container with Premium Halo Background */}
-                <div className="relative flex-shrink-0 w-20 h-20 flex items-center justify-center rounded-2xl bg-white/5 border border-white/5 group-hover:bg-white/10 group-hover:border-white/10 transition-all duration-300 shadow-inner">
+                <div 
+                  className="relative flex-shrink-0 w-20 h-20 flex items-center justify-center rounded-2xl bg-white/5 border border-white/5 transition-all duration-300 shadow-inner"
+                  style={{
+                    backgroundColor: isHovered ? `${skill.brandColor}15` : undefined,
+                    borderColor: isHovered ? `${skill.brandColor}40` : undefined
+                  }}
+                >
                   {/* Halo Background Glow */}
                   <div
                     className="hidden md:block absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl pointer-events-none scale-75"

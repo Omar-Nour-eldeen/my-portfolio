@@ -70,83 +70,115 @@ const Contact = () => {
           </p>
         </div>
 
-        <div className={`grid lg:grid-cols-2 gap-12 transform-gpu will-change-transform transition-all duration-700 ease-out ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+        <div className={`grid lg:grid-cols-2 gap-12 lg:gap-16 items-center transform-gpu will-change-transform transition-all duration-700 ease-out ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
           <div>
-            <h3 className="text-2xl font-semibold mb-8 hover:scale-105 transition-transform duration-300">Let's Work Together</h3>
 
-            <div className="space-y-6">
-              <div className="flex items-center gap-4 hover:scale-105 transition-transform duration-300">
-                <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center hover:bg-primary/30 transition-colors duration-300">
+            <div className="space-y-4">
+              <a href="mailto:mr4110140@gmail.com" className="flex items-center gap-5 p-4 rounded-2xl bg-slate-900/40 border border-white/5 hover:border-primary/50 hover:bg-slate-900/60 hover:shadow-[0_0_20px_rgba(99,102,241,0.15)] transition-all duration-300 group">
+                <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 group-hover:scale-110 transition-all duration-300">
                   <Mail className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <h4 className="font-semibold hover:scale-105 transition-transform duration-300">Email</h4>
-                  <p className="text-muted-foreground hover:text-foreground transition-colors duration-300">mr4110140@gmail.com</p>
+                  <h4 className="font-semibold text-lg text-white/90 group-hover:text-primary transition-colors duration-300">Email</h4>
+                  <p className="text-muted-foreground group-hover:text-white transition-colors duration-300">mr4110140@gmail.com</p>
                 </div>
-              </div>
+              </a>
 
-              <div className="flex items-center gap-4 hover:scale-105 transition-transform duration-300">
-                <div className="w-12 h-12 bg-accent/20 rounded-lg flex items-center justify-center hover:bg-accent/30 transition-colors duration-300">
+              <a href="tel:01123311041" className="flex items-center gap-5 p-4 rounded-2xl bg-slate-900/40 border border-white/5 hover:border-accent/50 hover:bg-slate-900/60 hover:shadow-[0_0_20px_rgba(236,72,153,0.15)] transition-all duration-300 group">
+                <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center group-hover:bg-accent/20 group-hover:scale-110 transition-all duration-300">
                   <Phone className="w-6 h-6 text-accent" />
                 </div>
                 <div>
-                  <h4 className="font-semibold hover:scale-105 transition-transform duration-300">Phone</h4>
-                  <p className="text-muted-foreground hover:text-foreground transition-colors duration-300">01123311041</p>
+                  <h4 className="font-semibold text-lg text-white/90 group-hover:text-accent transition-colors duration-300">Phone</h4>
+                  <p className="text-muted-foreground group-hover:text-white transition-colors duration-300">01123311041</p>
                 </div>
-              </div>
+              </a>
 
-              <div className="flex items-center gap-4 hover:scale-105 transition-transform duration-300">
-                <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center hover:bg-primary/30 transition-colors duration-300">
-                  <MapPin className="w-6 h-6 text-primary" />
+              <div className="flex items-center gap-5 p-4 rounded-2xl bg-slate-900/40 border border-white/5 hover:border-emerald-500/50 hover:bg-slate-900/60 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)] transition-all duration-300 group cursor-default">
+                <div className="w-14 h-14 rounded-xl bg-emerald-500/10 flex items-center justify-center group-hover:bg-emerald-500/20 group-hover:scale-110 transition-all duration-300">
+                  <MapPin className="w-6 h-6 text-emerald-500" />
                 </div>
                 <div>
-                  <h4 className="font-semibold hover:scale-105 transition-transform duration-300">Location</h4>
-                  <p className="text-muted-foreground hover:text-foreground transition-colors duration-300">Egypt,Cairo</p>
+                  <h4 className="font-semibold text-lg text-white/90 group-hover:text-emerald-500 transition-colors duration-300">Location</h4>
+                  <p className="text-muted-foreground group-hover:text-white transition-colors duration-300">Egypt, Cairo</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <Card className="bg-gray-800 border-border/50">
-            <CardContent className="p-8">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-sm font-medium mb-2 block">First Name</label>
-                    <Input name="firstName" placeholder="John" className="bg-gray-900" required/>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium mb-2 block">Last Name</label>
-                    <Input name="lastName" placeholder="Doe" className="bg-gray-900" required/>
-                  </div>
-                </div>
+          <div className="relative group perspective-1000">
+            {/* Ambient Glow behind the form */}
+            <div className="absolute -inset-2 rounded-[2rem] bg-gradient-primary blur-2xl opacity-25 group-hover:opacity-50 transition duration-700 pointer-events-none" />
 
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Email</label>
-                  <Input name="email" type="email" placeholder="john@example.com" className="bg-gray-900" required/>
-                </div>
+            {/* Gradient colored border wrapper */}
+            <div className="relative rounded-3xl p-[2px] bg-gradient-to-br from-primary via-purple-500 to-accent">
+              <Card className="relative bg-slate-900/90 backdrop-blur-xl border-0 shadow-2xl rounded-3xl overflow-hidden">
+                <CardContent className="p-6 md:p-8">
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="text-sm font-semibold text-white/90">First Name</label>
+                        <Input 
+                          name="firstName" 
+                          placeholder="John" 
+                          className="h-10 bg-slate-950/50 border-white/10 text-white placeholder:text-white/30 focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary transition-all duration-300 rounded-xl" 
+                          required
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-sm font-semibold text-white/90">Last Name</label>
+                        <Input 
+                          name="lastName" 
+                          placeholder="Doe" 
+                          className="h-10 bg-slate-950/50 border-white/10 text-white placeholder:text-white/30 focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary transition-all duration-300 rounded-xl" 
+                          required
+                        />
+                      </div>
+                    </div>
 
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Subject</label>
-                  <Input name="subject" placeholder="Project Collaboration" className="bg-gray-900" required/>
-                </div>
+                    <div className="space-y-1.5">
+                      <label className="text-sm font-semibold text-white/90">Email</label>
+                      <Input 
+                        name="email" 
+                        type="email" 
+                        placeholder="john@example.com" 
+                        className="h-10 bg-slate-950/50 border-white/10 text-white placeholder:text-white/30 focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary transition-all duration-300 rounded-xl" 
+                        required
+                      />
+                    </div>
 
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Message</label>
-                  <Textarea
-                    name="message"
-                    placeholder="Tell me about your project..."
-                    className="min-h-[120px] bg-gray-900"
-                    required
-                  />
-                </div>
+                    <div className="space-y-1.5">
+                      <label className="text-sm font-semibold text-white/90">Subject</label>
+                      <Input 
+                        name="subject" 
+                        placeholder="Project Collaboration" 
+                        className="h-10 bg-slate-950/50 border-white/10 text-white placeholder:text-white/30 focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary transition-all duration-300 rounded-xl" 
+                        required
+                      />
+                    </div>
 
-                <Button type="submit" disabled={loading} className="w-full bg-gradient-primary hover:shadow-glow hover:scale-105 transition-all duration-300">
-                  {loading ? "Sending..." : "Send Message"}
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
+                    <div className="space-y-1.5">
+                      <label className="text-sm font-semibold text-white/90">Message</label>
+                      <Textarea
+                        name="message"
+                        placeholder="Tell me about your project..."
+                        className="min-h-[100px] p-3 bg-slate-950/50 border-white/10 text-white placeholder:text-white/30 focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary transition-all duration-300 resize-none rounded-xl"
+                        required
+                      />
+                    </div>
+
+                    <Button 
+                      type="submit" 
+                      disabled={loading} 
+                      className="w-full h-11 text-base font-bold bg-gradient-primary text-white border-0 shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_30px_rgba(99,102,241,0.5)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 rounded-xl mt-2"
+                    >
+                      {loading ? "Sending..." : "Send Message"}
+                    </Button>
+                  </form>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </div>
       </div>
     </section>

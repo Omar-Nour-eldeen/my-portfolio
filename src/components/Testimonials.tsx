@@ -1,4 +1,3 @@
-import { Card, CardContent } from "@/components/ui/card";
 import { Star, Quote } from "lucide-react";
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 
@@ -50,50 +49,69 @@ const Testimonials = () => {
           </p>
         </div>
         
-        <div className={`grid md:grid-cols-2 gap-8 transform-gpu will-change-transform transition-all duration-700 ease-out ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
-          {testimonials.map((testimonial, index) => (
-            <Card 
-              key={index}
-              className="group overflow-hidden bg-card/50 md:backdrop-blur-sm backdrop-blur-none border-border/50 hover:shadow-elegant transition-all duration-300 hover:-translate-y-2"
-            >
-              <CardContent className="p-8">
-                <div className="flex flex-col sm:flex-row items-start gap-4">
-                  <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center hover:bg-primary/30 transition-colors duration-300">
-                    <Quote className="w-6 h-6 text-primary" />
-                  </div>
-                  
-                  <div className="flex-1">
+        <div className={`grid md:grid-cols-2 gap-6 transform-gpu will-change-transform transition-all duration-700 ease-out ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+          {testimonials.map((testimonial, index) => {
+            const accentColors = [
+              { border: "#a855f7", glow: "rgba(168,85,247,0.3)", bg: "rgba(168,85,247,0.08)" },
+              { border: "#34d399", glow: "rgba(52,211,153,0.3)", bg: "rgba(52,211,153,0.08)" },
+              { border: "#38bdf8", glow: "rgba(56,189,248,0.3)", bg: "rgba(56,189,248,0.08)" },
+              { border: "#fb923c", glow: "rgba(251,146,60,0.3)",  bg: "rgba(251,146,60,0.08)"  },
+            ];
+            const color = accentColors[index % accentColors.length];
+            return (
+              <div key={index} className="relative group">
+                {/* Ambient Glow */}
+                <div
+                  className="absolute -inset-1 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+                  style={{ background: color.glow }}
+                />
+                <div
+                  className="relative overflow-hidden rounded-2xl bg-slate-900/60 md:backdrop-blur-xl backdrop-blur-none border-2 group-hover:-translate-y-2 transition-all duration-500"
+                  style={{ borderColor: color.border }}
+                >
+                  {/* Shine sweep */}
+                  <div className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out pointer-events-none" />
+
+                  <div className="p-8">
+                    {/* Quote icon */}
+                    <div
+                      className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110"
+                      style={{ background: color.bg, border: `1px solid ${color.border}40` }}
+                    >
+                      <Quote className="w-6 h-6" style={{ color: color.border }} />
+                    </div>
+
+                    {/* Stars */}
                     <div className="flex items-center gap-1 mb-4">
                       {[...Array(testimonial.rating)].map((_, i) => (
                         <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                       ))}
                     </div>
-                    
-                    <p className="text-muted-foreground mb-6 italic hover:text-foreground transition-colors duration-300">
+
+                    <p className="text-muted-foreground mb-6 italic leading-relaxed group-hover:text-white/80 transition-colors duration-300">
                       "{testimonial.content}"
                     </p>
-                    
+
+                    {/* Divider */}
+                    <div className="h-px mb-5" style={{ background: `linear-gradient(to right, ${color.border}40, transparent)` }} />
+
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center">
-                        <span className="text-white font-bold text-sm">
-                          {testimonial.name.split(' ').map(n => n[0]).join('')}
-                        </span>
+                      <div
+                        className="w-11 h-11 rounded-full flex items-center justify-center border-2 font-bold text-white text-sm transition-all duration-300 group-hover:scale-110"
+                        style={{ background: color.bg, borderColor: color.border, color: color.border }}
+                      >
+                        {testimonial.name.split(' ').map(n => n[0]).join('')}
                       </div>
-                      
                       <div>
-                        <h4 className="font-semibold hover:scale-105 transition-transform duration-300">
-                          {testimonial.name}
-                        </h4>
-                        <p className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-300">
-                          {testimonial.position}
-                        </p>
+                        <h4 className="font-bold text-white/90">{testimonial.name}</h4>
+                        <p className="text-sm" style={{ color: color.border }}>{testimonial.position}</p>
                       </div>
                     </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
