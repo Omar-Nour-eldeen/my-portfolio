@@ -36,9 +36,9 @@ const About = () => {
             <div className="hidden md:block absolute -inset-2 bg-gradient-to-r from-primary via-purple-500 to-accent rounded-3xl blur-xl opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-300" />
             
             {/* Image Frame */}
-            <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-secondary border border-border/50 shadow-glow hover:shadow-glow-lg transition-all duration-500">
+            <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-secondary border border-border/50 shadow-glow hover:shadow-glow-lg transition-all duration-500">
               <img
-                src="/my-photo.jpg"
+                src="/About-Photo.png"
                 alt="Omar Nour Eldeen Profile"
                 className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
                 onError={(e) => {
