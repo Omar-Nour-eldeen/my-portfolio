@@ -100,7 +100,7 @@ const Education = () => {
       period: "2023 – Expected 2027",
       location: "Egypt, Cairo",
       description: "Specialized in Computer Science with a focus on web development and database systems.",
-      gpa: "3.05/4.0 (Very Good)",
+      gpa: "3.03/4.0 (Very Good)",
       logo: "/capital-university.jpg"
     }
   ];
