@@ -1,11 +1,17 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Download, ChevronDown } from "lucide-react";
+
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isHomePage = location.pathname === "/";
 
   useEffect(() => {
     let ticking = false;
@@ -15,15 +21,17 @@ const Navigation = () => {
         window.requestAnimationFrame(() => {
           setScrolled(window.scrollY > 50);
 
-          // Update active section based on scroll position
-          const sections = ['home', 'about', 'services', 'projects', 'experience', 'education', 'testimonials', 'contact', 'thankyou'];
-          const scrollPosition = window.scrollY + 100; // Offset for better detection
+          if (isHomePage) {
+            // Update active section based on scroll position
+            const sections = ['home', 'about', 'services', 'projects', 'experience', 'education', 'testimonials', 'contact', 'thankyou'];
+            const scrollPosition = window.scrollY + 100; // Offset for better detection
 
-          for (let i = sections.length - 1; i >= 0; i--) {
-            const section = document.getElementById(sections[i]);
-            if (section && section.offsetTop <= scrollPosition) {
-              setActiveSection(sections[i]);
-              break;
+            for (let i = sections.length - 1; i >= 0; i--) {
+              const section = document.getElementById(sections[i]);
+              if (section && section.offsetTop <= scrollPosition) {
+                setActiveSection(sections[i]);
+                break;
+              }
             }
           }
           ticking = false;
@@ -33,7 +41,7 @@ const Navigation = () => {
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isHomePage]);
 
   const navItems = [
     { name: 'Home', href: '#home' },
@@ -50,21 +58,34 @@ const Navigation = () => {
   ];
 
   const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    element?.scrollIntoView({ behavior: 'smooth' });
+    const targetId = href.replace('#', '');
+    if (isHomePage) {
+      const element = document.getElementById(targetId);
+      element?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate('/');
+      setTimeout(() => {
+        const element = document.getElementById(targetId);
+        element?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
     setIsOpen(false);
   };
 
-
+  const handleLogoClick = () => {
+    if (isHomePage) {
+      document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate('/');
+    }
+  };
 
   const handleResumeDownload = () => {
-    // Create a link element to trigger download
     const link = document.createElement('a');
     link.href = '/Omar Nour Eldeen_CV.pdf';
     link.download = 'Omar Nour Eldeen_CV.pdf';
     link.target = '_blank';
 
-    // Append to body, click, and remove
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -80,7 +101,7 @@ const Navigation = () => {
   };
 
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled
+    <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled || !isHomePage
         ? 'bg-slate-950/80 backdrop-blur-xl border-b border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.4)]'
         : 'bg-transparent'
       }`}>
@@ -88,7 +109,7 @@ const Navigation = () => {
         <div className="flex items-center justify-between h-20 sm:h-24">
           {/* Logo Image */}
           <div
-            onClick={() => document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={handleLogoClick}
             className="flex items-center cursor-pointer hover:opacity-85 hover:scale-105 active:scale-95 transition-all duration-300"
           >
             <img src="/logo.png" alt="Logo" className="h-16 sm:h-20 ms-5" />
@@ -98,7 +119,7 @@ const Navigation = () => {
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => {
               const sectionId = item.href.replace('#', '');
-              const isActive = activeSection === sectionId;
+              const isActive = isHomePage && activeSection === sectionId;
               return (
                 <button
                   key={item.name}
@@ -119,14 +140,14 @@ const Navigation = () => {
             <div className="relative">
               <button
                 onClick={handleDropdownClick}
-                className={`relative flex items-center pb-1 transition-all duration-300 ${['education', 'experience', 'testimonials'].includes(activeSection)
+                className={`relative flex items-center pb-1 transition-all duration-300 ${isHomePage && ['education', 'experience', 'testimonials'].includes(activeSection)
                     ? 'text-primary font-semibold'
                     : 'text-white/70 hover:text-white'
                   }`}
               >
                 More
                 <ChevronDown className={`w-4 h-4 ml-1 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} />
-                <span className={`absolute bottom-0 left-0 h-0.5 bg-gradient-primary rounded-full transition-all duration-300 ${['education', 'experience', 'testimonials'].includes(activeSection) ? 'w-full' : 'w-0'
+                <span className={`absolute bottom-0 left-0 h-0.5 bg-gradient-primary rounded-full transition-all duration-300 ${isHomePage && ['education', 'experience', 'testimonials'].includes(activeSection) ? 'w-full' : 'w-0'
                   }`} />
               </button>
 
@@ -135,7 +156,7 @@ const Navigation = () => {
                   <div className="py-1.5">
                     {dropdownItems.map((item) => {
                       const sectionId = item.href.replace('#', '');
-                      const isActive = activeSection === sectionId;
+                      const isActive = isHomePage && activeSection === sectionId;
                       return (
                         <button
                           key={item.name}
@@ -184,7 +205,7 @@ const Navigation = () => {
             <div className="px-2 pt-2 pb-3 space-y-1">
               {navItems.map((item) => {
                 const sectionId = item.href.replace('#', '');
-                const isActive = activeSection === sectionId;
+                const isActive = isHomePage && activeSection === sectionId;
                 return (
                   <button
                     key={item.name}
@@ -202,7 +223,7 @@ const Navigation = () => {
               {/* Mobile Dropdown Items */}
               {dropdownItems.map((item) => {
                 const sectionId = item.href.replace('#', '');
-                const isActive = activeSection === sectionId;
+                const isActive = isHomePage && activeSection === sectionId;
                 return (
                   <button
                     key={item.name}
@@ -228,8 +249,6 @@ const Navigation = () => {
             </div>
           </div>
         )}
-
-
       </div>
     </nav>
   );

@@ -1,15 +1,14 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ExternalLink, Github, Layers, Briefcase, Users, User } from "lucide-react";
-import project1 from "@/assets/project1.jpg";
-import project2 from "@/assets/project2.jpg";
-import project3 from "@/assets/project3.jpg";
+import { ExternalLink, Github, Layers, Briefcase, Users, User, ArrowRight, FileCode2 } from "lucide-react";
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
+import { useProjects } from "@/hooks/use-projects";
 
 type ProjectCategory = "all" | "freelance" | "team" | "personal";
 
 const Projects = () => {
+  const { projects } = useProjects();
   const { ref: projectsRef, isIntersecting } = useIntersectionObserver({
     threshold: 0.05,
     rootMargin: '-50px'
@@ -70,69 +69,6 @@ const Projects = () => {
     }
   };
 
-  const projects = [
-    {
-      title: "E-commerce Platform",
-      category: "team",
-      categoryLabel: "Team Project",
-      description: "An advanced storefront application complete with a shopping cart, Stripe secure payment integration, relational database management, and a robust admin dashboard for tracking product inventory and user orders.",
-      image: project3,
-      technologies: ["Next.js", "PostgreSQL", "Stripe", "Prisma"],
-      github: "#",
-      live: "#"
-    },
-    {
-      title: "Mobile App Design",
-      category: "personal",
-      categoryLabel: "Personal Project",
-      description: "A gorgeous mobile application mockup exhibiting smooth interfaces, gesture navigations, and customized controls. Focuses on minimal, glassmorphic layout elements with optimal spacing and responsive scaling.",
-      image: project2,
-      technologies: ["React Native", "Redux", "Firebase", "Figma"],
-      github: "#",
-      live: "#"
-    },
-    {
-      title: "Admin Dashboard",
-      category: "freelance",
-      categoryLabel: "Freelance Work",
-      description: "A freelance-grade admin dashboard built to manage core application data. Uses JSONPlaceholder API to simulate full CRUD operations on Users, Posts, and Comments. Features sorting, pagination, and real-time toast feedback.",
-      image: project1,
-      technologies: ["HTML", "CSS", "Bootstrap", "JS", "jQuery", "DataTables"],
-      github: "https://github.com/omar-nour-eldeen/Admin_Dashboard",
-      live: "https://omar-nour-eldeen.github.io/Admin_Dashboard/"
-    },
-    {
-      title: "Developer Community Platform",
-      category: "team",
-      categoryLabel: "Team Project",
-      description: "A collaborative hub for developers to share code snippets, ask questions, and build teams. Built during a hackathon with an agile workflow, microservices architecture, and real-time chat APIs.",
-      image: project3,
-      technologies: ["Node.js", "Express", "MongoDB", "Socket.io", "React"],
-      github: "#",
-      live: "#"
-    },
-    {
-      title: "Task Management App",
-      category: "personal",
-      categoryLabel: "Personal Project",
-      description: "Minimalist productivity tool with drag-and-drop Kanban boards, calendar views, daily reminders, and detailed statistics on finished tasks. Perfect for tracking coding progress.",
-      image: project2,
-      technologies: ["TypeScript", "Tailwind CSS", "Zustand", "LocalForage"],
-      github: "#",
-      live: "#"
-    },
-    {
-      title: "Corporate Landing Page",
-      category: "freelance",
-      categoryLabel: "Freelance Work",
-      description: "High-performance, modern business website with optimized SEO, custom illustrations, and interactive contact forms designed to maximize user engagement and lead generation.",
-      image: project1,
-      technologies: ["React", "Tailwind CSS", "Framer Motion", "Vite"],
-      github: "#",
-      live: "#"
-    }
-  ];
-
   const filteredProjects = projects.filter(
     (project) => activeFilter === "all" || project.category === activeFilter
   );
@@ -147,7 +83,10 @@ const Projects = () => {
         {/* Section Header */}
         <div className={`text-center mb-16 transform-gpu will-change-transform transition-all duration-700 ease-out ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
           <h2 className="text-4xl md:text-5xl font-bold mb-6 hover:scale-105 transition-transform duration-300">My Projects</h2>
-          <div className="w-20 h-1 bg-gradient-primary mx-auto rounded-full hover:w-24 transition-all duration-300" />
+          <div className="w-20 h-1 bg-gradient-primary mx-auto rounded-full hover:w-24 transition-all duration-300 mb-4" />
+          <p className="text-muted-foreground max-w-2xl mx-auto text-sm md:text-base">
+            Click on any project to explore system architecture, API documentation, Docker configurations, and relational database schemas.
+          </p>
         </div>
 
         {/* Filters */}
@@ -193,7 +132,7 @@ const Projects = () => {
             const styles = getCategoryStyles(project.category);
             return (
               <div
-                key={project.title}
+                key={project.id}
                 className={`relative group w-full h-full transform-gpu transition-all duration-700 ease-out flex flex-col ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
                   }`}
                 style={{ transitionDelay: `${index * 50}ms` }}
@@ -213,19 +152,19 @@ const Projects = () => {
                   }}
                 >
                   <div
-                    className="relative h-full overflow-hidden rounded-2xl md:backdrop-blur-xl backdrop-blur-none transition-all duration-500 flex flex-col"
+                    className="relative h-full overflow-hidden rounded-2xl md:backdrop-blur-xl backdrop-blur-none transition-all duration-500 flex flex-col justify-between"
                     style={{
                       background: `linear-gradient(135deg, ${styles.gradientFrom}15, ${styles.gradientTo}08, rgba(15,23,42,0.95))`
                     }}
                   >
                     {/* Image Top Panel */}
-                    <div className="relative overflow-hidden aspect-video w-full border-b border-primary/20">
+                    <Link to={`/project/${project.id}`} className="block relative overflow-hidden aspect-video w-full border-b border-primary/20">
                       <img
                         src={project.image}
                         alt={project.title}
                         className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent pointer-events-none" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none" />
 
                       {/* Category Label on Image */}
                       <div className="absolute top-4 left-4 z-10">
@@ -233,60 +172,34 @@ const Projects = () => {
                           {project.categoryLabel}
                         </span>
                       </div>
+
                       <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-2">
-                        {project.live && project.live !== "#" && (
-                          <a
-                            href={project.live}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-10 h-10 rounded-full flex items-center justify-center text-white hover:scale-110 active:scale-95 transition-all duration-300 shadow-xl"
-                            style={{ background: `linear-gradient(to right, ${styles.gradientFrom}, ${styles.gradientTo})` }}
-                            title="Live Demo"
-                          >
-                            <ExternalLink className="w-4 h-4" />
-                          </a>
-                        )}
-                        {project.github && project.github !== "#" && (
-                          <a
-                            href={project.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-10 h-10 rounded-full bg-slate-900/95 border border-white/10 flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-300 shadow-xl"
-                            style={{ color: styles.accentColor }}
-                            onMouseEnter={(e) => {
-                              e.currentTarget.style.borderColor = styles.accentColor;
-                              e.currentTarget.style.boxShadow = `0 0 10px ${styles.glow.replace('0.4', '0.3')}`;
-                            }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)';
-                              e.currentTarget.style.boxShadow = 'none';
-                            }}
-                            title="GitHub Code"
-                          >
-                            <Github className="w-4 h-4" />
-                          </a>
-                        )}
+                        <span className="px-4 py-2 rounded-xl bg-slate-900/90 text-white font-bold text-xs flex items-center gap-2 border border-white/20 shadow-xl">
+                          <FileCode2 className="w-4 h-4 text-primary" /> View Specs & Architecture
+                        </span>
                       </div>
-                    </div>
+                    </Link>
 
                     {/* Card Content Details */}
                     <div className="p-4 md:p-5 flex-1 flex flex-col justify-between gap-3">
                       <div>
                         <div className="flex items-start justify-between gap-2 mb-2">
-                          <h3
-                            className="text-lg font-bold transition-colors duration-300 line-clamp-1"
-                            style={{ color: styles.accentColor }}
-                          >
-                            {project.title}
-                          </h3>
+                          <Link to={`/project/${project.id}`}>
+                            <h3
+                              className="text-lg font-bold transition-colors duration-300 line-clamp-1 hover:underline"
+                              style={{ color: styles.accentColor }}
+                            >
+                              {project.title}
+                            </h3>
+                          </Link>
                         </div>
 
-                        <p className="text-muted-foreground mb-3 leading-snug transition-colors duration-300 text-sm">
+                        <p className="text-muted-foreground mb-3 leading-snug transition-colors duration-300 text-sm line-clamp-2">
                           {project.description}
                         </p>
 
                         <div className="flex flex-wrap gap-1.5 mb-4">
-                          {project.technologies.map((tech) => (
+                          {project.technologies.slice(0, 4).map((tech) => (
                             <span
                               key={tech}
                               className="inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium transition-all duration-300"
@@ -299,54 +212,62 @@ const Projects = () => {
                               {tech}
                             </span>
                           ))}
+                          {project.technologies.length > 4 && (
+                            <span className="text-[10px] text-muted-foreground self-center">
+                              +{project.technologies.length - 4} more
+                            </span>
+                          )}
                         </div>
                       </div>
 
-                      <div className="flex flex-wrap gap-2 pt-2">
-                        {project.live && project.live !== "#" ? (
-                          <Button
-                            asChild
-                            size="sm"
-                            className="flex-1 rounded-2xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 font-bold text-[10px] text-white shadow-md border-0"
-                            style={{ background: `linear-gradient(to right, ${styles.gradientFrom}, ${styles.gradientTo})` }}
-                          >
-                            <a href={project.live} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 py-2">
-                              <ExternalLink className="w-3.5 h-3.5" />
-                              Live Demo
-                            </a>
-                          </Button>
-                        ) : (
-                          <div className="flex-1 text-center py-2.5 text-[11px] font-semibold text-muted-foreground border border-dashed border-white/10 rounded-2xl bg-slate-900/30">
-                            Demo Coming Soon
-                          </div>
-                        )}
+                      <div className="pt-3 border-t border-white/10 flex flex-col gap-2">
+                        {/* Live & GitHub Action Buttons */}
+                        {(() => {
+                          const hasLive = Boolean(project.links?.live && project.links.live !== "#" && project.links.live.trim());
+                          const hasGithub = Boolean(project.links?.github && project.links.github !== "#" && project.links.github.trim());
 
-                        {project.github && project.github !== "#" && (
-                          <Button
-                            asChild
-                            size="sm"
-                            variant="outline"
-                            className="flex-1 rounded-2xl border-white/10 bg-slate-900/70 text-white transition-all duration-300 shadow-lg hover:bg-slate-900"
-                          >
-                            <a
-                              href={project.github}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center justify-center gap-2 py-2 w-full h-full"
-                              onMouseEnter={(e) => {
-                                e.currentTarget.parentElement!.style.borderColor = styles.accentColor;
-                                e.currentTarget.style.color = styles.accentColor;
-                              }}
-                              onMouseLeave={(e) => {
-                                e.currentTarget.parentElement!.style.borderColor = 'rgba(255,255,255,0.1)';
-                                e.currentTarget.style.color = 'white';
-                              }}
-                            >
-                              <Github className="w-3.5 h-3.5" />
-                              Code
-                            </a>
-                          </Button>
-                        )}
+                          if (!hasLive && !hasGithub) return null;
+
+                          return (
+                            <div className={`grid ${hasLive && hasGithub ? "grid-cols-2" : "grid-cols-1"} gap-2`}>
+                              {hasLive && (
+                                <a
+                                  href={project.links.live}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-white bg-slate-900/90 border border-emerald-500/40 hover:border-emerald-400 hover:bg-emerald-500/20 hover:text-emerald-300 transition-all duration-300 shadow-sm group/btn"
+                                >
+                                  <ExternalLink className="w-3.5 h-3.5 text-emerald-400 group-hover/btn:scale-110 transition-transform" />
+                                  <span>Live Demo</span>
+                                </a>
+                              )}
+
+                              {hasGithub && (
+                                <a
+                                  href={project.links.github}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-white bg-slate-900/90 border border-purple-500/40 hover:border-purple-400 hover:bg-purple-500/20 hover:text-purple-300 transition-all duration-300 shadow-sm group/btn"
+                                >
+                                  <Github className="w-3.5 h-3.5 text-purple-400 group-hover/btn:scale-110 transition-transform" />
+                                  <span>GitHub</span>
+                                </a>
+                              )}
+                            </div>
+                          );
+                        })()}
+
+                        {/* View Architecture Button */}
+                        <Button
+                          asChild
+                          size="sm"
+                          className="w-full rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 font-bold text-xs text-white shadow-md border-0"
+                          style={{ background: `linear-gradient(to right, ${styles.gradientFrom}, ${styles.gradientTo})` }}
+                        >
+                          <Link to={`/project/${project.id}`} className="flex items-center justify-center gap-2 py-2">
+                            <Layers className="w-3.5 h-3.5" /> View Architecture <ArrowRight className="w-3.5 h-3.5" />
+                          </Link>
+                        </Button>
                       </div>
                     </div>
                   </div>
