@@ -27,7 +27,9 @@ import {
   Container,
   CheckCircle,
   Images,
-  X
+  X,
+  Pencil,
+  RotateCcw
 } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -61,6 +63,9 @@ const Admin = () => {
 
     return () => subscription.unsubscribe();
   }, []);
+
+  // Editing State
+  const [editingProjectId, setEditingProjectId] = useState<string | null>(null);
 
   // Form State - Basic Details
   const [formData, setFormData] = useState({
@@ -197,7 +202,89 @@ const Admin = () => {
     setDiagrams(diagrams.filter((_, i) => i !== idx));
   };
 
-  // Save new full project to Supabase
+  const resetForm = () => {
+    setEditingProjectId(null);
+    setFormData({
+      id: "",
+      title: "",
+      subtitle: "",
+      category: "freelance",
+      categoryLabel: "Freelance Work",
+      description: "",
+      longDescription: "",
+      image: "",
+      role: "",
+      duration: "",
+      status: "Production Ready",
+      technologies: "",
+      liveUrl: "",
+      githubUrl: "",
+      dockerUrl: "",
+      swaggerUrl: "",
+      dockerPullCommand: "",
+      dockerComposeSnippet: "",
+    });
+    setApiEndpoints([]);
+    setDocuments([]);
+    setDiagrams([]);
+    setGalleryImages([]);
+  };
+
+  const handleEditProject = (p: ProjectData) => {
+    setEditingProjectId(p.id);
+    setFormData({
+      id: p.id,
+      title: p.title || "",
+      subtitle: p.subtitle || "",
+      category: p.category || "freelance",
+      categoryLabel: p.categoryLabel || "Freelance Work",
+      description: p.description || "",
+      longDescription: p.longDescription || "",
+      image: p.image || "",
+      role: p.role || "",
+      duration: p.duration || "",
+      status: p.status || "Production Ready",
+      technologies: Array.isArray(p.technologies) ? p.technologies.join(", ") : "",
+      liveUrl: p.links?.live || "",
+      githubUrl: p.links?.github || "",
+      dockerUrl: p.links?.docker || "",
+      swaggerUrl: p.links?.swagger || "",
+      dockerPullCommand: p.dockerInfo?.pullCommand || "",
+      dockerComposeSnippet: p.dockerInfo?.composeSnippet || "",
+    });
+    setGalleryImages(p.gallery || []);
+    setApiEndpoints(p.apiEndpoints || []);
+    setDocuments(p.documents || []);
+    setDiagrams(p.diagrams || []);
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    toast.info(`Editing project "${p.title}"`);
+  };
+
+  const handleDeleteProject = async (projectId: string, projectTitle: string) => {
+    if (!window.confirm(`Are you sure you want to delete "${projectTitle}"? This cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      toast.info(`Deleting project "${projectTitle}"...`);
+      const { error } = await supabase.from("projects").delete().eq("id", projectId);
+
+      if (error) throw error;
+
+      toast.success(`Project "${projectTitle}" deleted successfully!`);
+
+      if (editingProjectId === projectId) {
+        resetForm();
+      }
+
+      await refetch();
+    } catch (err: any) {
+      toast.error(`Error deleting project: ${err.message || "Unknown error"}`);
+    }
+  };
+
+  // Save new or updated project to Supabase
   const handleSubmitNewProject = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -222,7 +309,7 @@ const Admin = () => {
     const mainImage = formData.image || (galleryImages.length > 0 ? galleryImages[0] : "");
     const allGallery = galleryImages.length > 0 ? galleryImages : (formData.image ? [formData.image] : []);
 
-    const newProjectPayload = {
+    const projectPayload = {
       id: formData.id.toLowerCase().trim().replace(/\s+/g, "-"),
       title: formData.title,
       subtitle: formData.subtitle,
@@ -253,39 +340,16 @@ const Admin = () => {
     };
 
     try {
-      toast.info("Saving full project specification to Supabase...");
-      const { error } = await supabase.from("projects").upsert(newProjectPayload, { onConflict: "id" });
+      toast.info(editingProjectId ? "Updating project in Supabase..." : "Saving new project to Supabase...");
+      const { error } = await supabase.from("projects").upsert(projectPayload, { onConflict: "id" });
 
       if (error) throw error;
 
-      toast.success(`Project "${formData.title}" saved successfully to Supabase!`);
+      toast.success(
+        `Project "${formData.title}" ${editingProjectId ? "updated" : "saved"} successfully in Supabase!`
+      );
 
-      // Reset form
-      setFormData({
-        id: "",
-        title: "",
-        subtitle: "",
-        category: "freelance",
-        categoryLabel: "Freelance Work",
-        description: "",
-        longDescription: "",
-        image: "",
-        role: "",
-        duration: "",
-        status: "Production Ready",
-        technologies: "",
-        liveUrl: "",
-        githubUrl: "",
-        dockerUrl: "",
-        swaggerUrl: "",
-        dockerPullCommand: "",
-        dockerComposeSnippet: "",
-      });
-      setApiEndpoints([]);
-      setDocuments([]);
-      setDiagrams([]);
-      setGalleryImages([]);
-
+      resetForm();
       await refetch();
     } catch (err: any) {
       toast.error(`Error saving project: ${err.message || "Ensure Supabase table 'projects' exists"}`);
@@ -411,9 +475,24 @@ const Admin = () => {
         <div className="grid lg:grid-cols-12 gap-8">
           {/* Left Column: Comprehensive Add New Project Form */}
           <div className="lg:col-span-7 bg-slate-900/80 border border-white/10 p-6 md:p-8 rounded-3xl backdrop-blur-xl shadow-2xl space-y-6">
-            <div className="flex items-center gap-3 border-b border-white/10 pb-4">
-              <Plus className="w-6 h-6 text-primary" />
-              <h2 className="text-xl font-bold text-white">Add New Full Project</h2>
+            <div className="flex items-center justify-between border-b border-white/10 pb-4">
+              <div className="flex items-center gap-3">
+                {editingProjectId ? <Pencil className="w-6 h-6 text-amber-400" /> : <Plus className="w-6 h-6 text-primary" />}
+                <h2 className="text-xl font-bold text-white">
+                  {editingProjectId ? `Edit Project: ${formData.title || editingProjectId}` : "Add New Full Project"}
+                </h2>
+              </div>
+              {editingProjectId && (
+                <Button
+                  type="button"
+                  onClick={resetForm}
+                  variant="ghost"
+                  size="sm"
+                  className="text-xs text-slate-400 hover:text-white flex items-center gap-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" /> Cancel Edit
+                </Button>
+              )}
             </div>
 
             <form onSubmit={handleSubmitNewProject} className="space-y-6 text-sm">
@@ -422,12 +501,15 @@ const Admin = () => {
                 <h3 className="text-xs font-bold text-primary uppercase tracking-wider">1. Basic Metadata</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-[11px] font-semibold text-slate-300 mb-1">Unique ID (Slug) *</label>
+                    <label className="block text-[11px] font-semibold text-slate-300 mb-1">
+                      Unique ID (Slug) * {editingProjectId && <span className="text-amber-400 text-[10px]">(Read-only)</span>}
+                    </label>
                     <Input
                       placeholder="e.g. perfume-store-api"
                       value={formData.id}
                       onChange={(e) => setFormData({ ...formData, id: e.target.value })}
-                      className="bg-slate-900 border-white/10 text-white rounded-xl text-xs"
+                      className="bg-slate-900 border-white/10 text-white rounded-xl text-xs disabled:opacity-60"
+                      disabled={!!editingProjectId}
                       required
                     />
                   </div>
@@ -797,9 +879,11 @@ const Admin = () => {
 
               <Button
                 type="submit"
-                className="w-full h-12 bg-gradient-primary text-white font-bold rounded-xl shadow-lg hover:scale-[1.01] transition-all duration-300 text-sm"
+                className={`w-full h-12 text-white font-bold rounded-xl shadow-lg hover:scale-[1.01] transition-all duration-300 text-sm ${
+                  editingProjectId ? "bg-amber-600 hover:bg-amber-500" : "bg-gradient-primary"
+                }`}
               >
-                Save Complete Project to Supabase
+                {editingProjectId ? "Update Project in Supabase" : "Save Complete Project to Supabase"}
               </Button>
             </form>
           </div>
@@ -825,13 +909,35 @@ const Admin = () => {
                         <span className="text-[10px] font-bold text-primary uppercase">{p.categoryLabel}</span>
                         <h3 className="font-bold text-sm text-white line-clamp-1">{p.title}</h3>
                       </div>
-                      <Link
-                        to={`/project/${p.id}`}
-                        target="_blank"
-                        className="text-xs text-slate-400 hover:text-white flex items-center gap-1 bg-slate-900 px-2 py-1 rounded-lg border border-white/10"
-                      >
-                        View <ExternalLink className="w-3 h-3 text-primary" />
-                      </Link>
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <Button
+                          type="button"
+                          onClick={() => handleEditProject(p)}
+                          size="sm"
+                          variant="ghost"
+                          className="h-7 px-2 text-xs text-amber-400 hover:text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/20 rounded-lg flex items-center gap-1"
+                          title="Edit Project"
+                        >
+                          <Pencil className="w-3 h-3" /> Edit
+                        </Button>
+                        <Button
+                          type="button"
+                          onClick={() => handleDeleteProject(p.id, p.title)}
+                          size="sm"
+                          variant="ghost"
+                          className="h-7 px-2 text-xs text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 rounded-lg flex items-center gap-1"
+                          title="Delete Project"
+                        >
+                          <Trash2 className="w-3 h-3" /> Delete
+                        </Button>
+                        <Link
+                          to={`/project/${p.id}`}
+                          target="_blank"
+                          className="h-7 px-2 text-xs text-slate-400 hover:text-white flex items-center gap-1 bg-slate-900 rounded-lg border border-white/10 inline-flex items-center"
+                        >
+                          View <ExternalLink className="w-3 h-3 text-primary" />
+                        </Link>
+                      </div>
                     </div>
 
                     <p className="text-xs text-slate-400 line-clamp-2">{p.description}</p>
