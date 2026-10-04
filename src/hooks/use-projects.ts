@@ -10,10 +10,22 @@ export const useProjects = () => {
   const fetchProjects = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
+      let { data, error } = await supabase
         .from('projects')
         .select('*')
+        .order('sort_order', { ascending: true, nullsFirst: false })
         .order('created_at', { ascending: false });
+
+      // If sort_order column doesn't exist in Supabase schema yet, retry without sort_order
+      if (error && (error.message.includes('sort_order') || error.code === 'PGRST204' || error.message.includes('column'))) {
+        console.warn("sort_order column missing, falling back to created_at order:", error.message);
+        const res = await supabase
+          .from('projects')
+          .select('*')
+          .order('created_at', { ascending: false });
+        data = res.data;
+        error = res.error;
+      }
 
       if (error) {
         console.error("Supabase fetch error:", error.message);
@@ -40,6 +52,11 @@ export const useProjects = () => {
           architecture: item.architecture || { pattern: '', overview: '', layers: [] },
           apiEndpoints: Array.isArray(item.api_endpoints || item.apiEndpoints)
             ? (item.api_endpoints || item.apiEndpoints)
+            : [],
+          flow: Array.isArray(item.flow)
+            ? item.flow
+            : Array.isArray(item.system_flow)
+            ? item.system_flow
             : [],
           dockerInfo: item.docker_info || item.dockerInfo,
           databaseSchema: item.database_schema || item.databaseSchema,

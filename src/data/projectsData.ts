@@ -21,6 +21,13 @@ export interface ProjectDiagram {
   highlights?: string[];
 }
 
+export interface ProjectFlowStep {
+  step?: number;
+  title: string;
+  description: string;
+  tech?: string;
+}
+
 export interface ProjectData {
   id: string;
   title: string;
@@ -50,6 +57,7 @@ export interface ProjectData {
     layers: { name: string; description: string; tech: string }[];
   };
   apiEndpoints: ApiEndpoint[];
+  flow?: ProjectFlowStep[];
   dockerInfo?: {
     pullCommand: string;
     composeSnippet: string;

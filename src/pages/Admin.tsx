@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useProjects } from "@/hooks/use-projects";
 import { supabase } from "@/integrations/supabase/client";
-import { ProjectData, ApiEndpoint, ProjectDocument, ProjectDiagram } from "@/data/projectsData";
+import { ProjectData, ApiEndpoint, ProjectDocument, ProjectDiagram, ProjectFlowStep } from "@/data/projectsData";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -29,7 +29,10 @@ import {
   Images,
   X,
   Pencil,
-  RotateCcw
+  RotateCcw,
+  ArrowUp,
+  ArrowDown,
+  GitBranch
 } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -118,6 +121,14 @@ const Admin = () => {
     description: "",
   });
 
+  // System Flow / Workflow Steps State
+  const [flowSteps, setFlowSteps] = useState<ProjectFlowStep[]>([]);
+  const [newFlowStep, setNewFlowStep] = useState<ProjectFlowStep>({
+    title: "",
+    description: "",
+    tech: "",
+  });
+
   const handleAddGalleryImage = (url: string) => {
     if (url && !galleryImages.includes(url)) {
       setGalleryImages((prev) => [...prev, url]);
@@ -126,6 +137,47 @@ const Admin = () => {
 
   const handleRemoveGalleryImage = (idx: number) => {
     setGalleryImages((prev) => prev.filter((_, i) => i !== idx));
+  };
+
+  const handleMoveGalleryImage = (idx: number, direction: "up" | "down") => {
+    setGalleryImages((prev) => {
+      const arr = [...prev];
+      const targetIdx = direction === "up" ? idx - 1 : idx + 1;
+      if (targetIdx < 0 || targetIdx >= arr.length) return arr;
+      [arr[idx], arr[targetIdx]] = [arr[targetIdx], arr[idx]];
+      return arr;
+    });
+  };
+
+  const handleMoveProject = async (idx: number, direction: "up" | "down") => {
+    const targetIdx = direction === "up" ? idx - 1 : idx + 1;
+    if (targetIdx < 0 || targetIdx >= projects.length) return;
+
+    const updatedProjects = [...projects];
+    const temp = updatedProjects[idx];
+    updatedProjects[idx] = updatedProjects[targetIdx];
+    updatedProjects[targetIdx] = temp;
+
+    try {
+      const updates = updatedProjects.map((proj, order) => ({
+        id: proj.id,
+        sort_order: order + 1,
+      }));
+
+      for (const item of updates) {
+        const { error } = await supabase
+          .from("projects")
+          .update({ sort_order: item.sort_order })
+          .eq("id", item.id);
+
+        if (error) throw error;
+      }
+
+      toast.success("Project order updated successfully!");
+      refetch();
+    } catch (err: any) {
+      toast.error("Failed to reorder projects: " + err.message);
+    }
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -202,6 +254,37 @@ const Admin = () => {
     setDiagrams(diagrams.filter((_, i) => i !== idx));
   };
 
+  // Flow Step Handlers
+  const handleAddFlowStep = () => {
+    if (!newFlowStep.title.trim()) return;
+    setFlowSteps((prev) => [
+      ...prev,
+      {
+        step: prev.length + 1,
+        title: newFlowStep.title.trim(),
+        description: newFlowStep.description.trim(),
+        tech: newFlowStep.tech?.trim() || undefined,
+      },
+    ]);
+    setNewFlowStep({ title: "", description: "", tech: "" });
+  };
+
+  const handleRemoveFlowStep = (idx: number) => {
+    setFlowSteps((prev) =>
+      prev.filter((_, i) => i !== idx).map((item, i) => ({ ...item, step: i + 1 }))
+    );
+  };
+
+  const handleMoveFlowStep = (idx: number, direction: "up" | "down") => {
+    const newArr = [...flowSteps];
+    const targetIdx = direction === "up" ? idx - 1 : idx + 1;
+    if (targetIdx < 0 || targetIdx >= newArr.length) return;
+    const temp = newArr[idx];
+    newArr[idx] = newArr[targetIdx];
+    newArr[targetIdx] = temp;
+    setFlowSteps(newArr.map((item, i) => ({ ...item, step: i + 1 })));
+  };
+
   const resetForm = () => {
     setEditingProjectId(null);
     setFormData({
@@ -227,6 +310,7 @@ const Admin = () => {
     setApiEndpoints([]);
     setDocuments([]);
     setDiagrams([]);
+    setFlowSteps([]);
     setGalleryImages([]);
   };
 
@@ -256,6 +340,7 @@ const Admin = () => {
     setApiEndpoints(p.apiEndpoints || []);
     setDocuments(p.documents || []);
     setDiagrams(p.diagrams || []);
+    setFlowSteps(p.flow || []);
 
     window.scrollTo({ top: 0, behavior: "smooth" });
     toast.info(`Editing project "${p.title}"`);
@@ -331,6 +416,8 @@ const Admin = () => {
       },
       documents: documents,
       diagrams: diagrams,
+      flow: flowSteps,
+      system_flow: flowSteps,
       architecture: { pattern: "Clean Architecture", overview: "Scalable modular system architecture", layers: [] },
       api_endpoints: apiEndpoints,
       docker_info: dockerInfoObj,
@@ -647,16 +734,37 @@ const Admin = () => {
                   {galleryImages.length > 0 && (
                     <div className="flex flex-wrap gap-2 p-3 rounded-xl bg-slate-950/60 border border-white/5">
                       {galleryImages.map((img, idx) => (
-                        <div key={idx} className="relative w-20 h-14 rounded-lg overflow-hidden border border-white/10 group flex-shrink-0">
+                        <div key={idx} className="relative w-24 h-16 rounded-lg overflow-hidden border border-white/10 group flex-shrink-0">
                           <img src={img} alt={`Gallery ${idx + 1}`} className="w-full h-full object-cover" />
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveGalleryImage(idx)}
-                            className="absolute inset-0 bg-red-500/80 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"
-                          >
-                            <X className="w-4 h-4 text-white" />
-                          </button>
-                          <span className="absolute bottom-0.5 left-0.5 text-[8px] bg-black/60 text-white px-1 rounded font-mono">{idx + 1}</span>
+                          <div className="absolute inset-0 bg-slate-950/80 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-1 transition-opacity">
+                            <button
+                              type="button"
+                              onClick={() => handleMoveGalleryImage(idx, "up")}
+                              disabled={idx === 0}
+                              className="p-1 rounded bg-slate-800 text-white hover:bg-primary disabled:opacity-30"
+                              title="Move Left/Up"
+                            >
+                              <ArrowLeft className="w-3 h-3" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleMoveGalleryImage(idx, "down")}
+                              disabled={idx === galleryImages.length - 1}
+                              className="p-1 rounded bg-slate-800 text-white hover:bg-primary disabled:opacity-30"
+                              title="Move Right/Down"
+                            >
+                              <ArrowLeft className="w-3 h-3 rotate-180" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveGalleryImage(idx)}
+                              className="p-1 rounded bg-red-600 text-white hover:bg-red-500"
+                              title="Remove"
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                          </div>
+                          <span className="absolute bottom-0.5 left-0.5 text-[8px] bg-black/70 text-white px-1 rounded font-mono">{idx + 1}</span>
                         </div>
                       ))}
                     </div>
@@ -877,6 +985,102 @@ const Admin = () => {
                 </Button>
               </div>
 
+              {/* 7. System Execution Flow / Workflow Steps */}
+              <div className="space-y-3 p-4 rounded-2xl bg-slate-950/60 border border-white/5">
+                <h3 className="text-xs font-bold text-teal-400 uppercase tracking-wider flex items-center justify-between">
+                  <span>7. System Execution Flow Steps ({flowSteps.length})</span>
+                </h3>
+                <p className="text-[11px] text-slate-400">
+                  Add sequential architecture flow steps (e.g. 1. Client Request → 2. API Gateway → 3. CQRS Engine → 4. Database Sync).
+                </p>
+
+                {flowSteps.map((stepItem, idx) => (
+                  <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-slate-900 border border-white/5 text-xs gap-3">
+                    <div className="flex items-center gap-3">
+                      <span className="w-6 h-6 rounded-full bg-teal-500/20 border border-teal-500/40 text-teal-400 font-bold text-xs flex items-center justify-center shrink-0">
+                        {idx + 1}
+                      </span>
+                      <div>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-white font-bold">{stepItem.title}</span>
+                          {stepItem.tech && (
+                            <span className="text-[10px] bg-teal-500/10 text-teal-300 border border-teal-500/20 px-2 py-0.5 rounded font-mono">
+                              {stepItem.tech}
+                            </span>
+                          )}
+                        </div>
+                        {stepItem.description && (
+                          <p className="text-[11px] text-slate-400 mt-0.5 line-clamp-1">{stepItem.description}</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-1 shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => handleMoveFlowStep(idx, "up")}
+                        disabled={idx === 0}
+                        className="p-1 text-slate-400 hover:text-white disabled:opacity-30 transition-colors"
+                        title="Move Up"
+                      >
+                        <ArrowUp className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleMoveFlowStep(idx, "down")}
+                        disabled={idx === flowSteps.length - 1}
+                        className="p-1 text-slate-400 hover:text-white disabled:opacity-30 transition-colors"
+                        title="Move Down"
+                      >
+                        <ArrowDown className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveFlowStep(idx)}
+                        className="text-red-400 hover:text-red-300 p-1 transition-colors"
+                        title="Remove Step"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+
+                <div className="space-y-2 p-3 rounded-xl bg-slate-950/50 border border-white/5">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    <Input
+                      placeholder="Step Title * (e.g. API Gateway Auth)"
+                      value={newFlowStep.title}
+                      onChange={(e) => setNewFlowStep({ ...newFlowStep, title: e.target.value })}
+                      className="bg-slate-900 border-white/10 text-white rounded-xl text-xs h-9"
+                    />
+                    <Input
+                      placeholder="Tech/Layer (e.g. ASP.NET Core / JWT)"
+                      value={newFlowStep.tech || ""}
+                      onChange={(e) => setNewFlowStep({ ...newFlowStep, tech: e.target.value })}
+                      className="bg-slate-900 border-white/10 text-white rounded-xl text-xs h-9 font-mono"
+                    />
+                  </div>
+                  <Input
+                    placeholder="Step Description (e.g. Validates bearer token and applies rate limiting)"
+                    value={newFlowStep.description || ""}
+                    onChange={(e) => setNewFlowStep({ ...newFlowStep, description: e.target.value })}
+                    className="bg-slate-900 border-white/10 text-white rounded-xl text-xs h-9"
+                  />
+                </div>
+
+                <Button
+                  type="button"
+                  onClick={handleAddFlowStep}
+                  variant="outline"
+                  size="sm"
+                  className="w-full text-xs rounded-xl border-dashed border-white/20"
+                  disabled={!newFlowStep.title.trim()}
+                >
+                  + Add Flow Step
+                </Button>
+              </div>
+
               <Button
                 type="submit"
                 className={`w-full h-12 text-white font-bold rounded-xl shadow-lg hover:scale-[1.01] transition-all duration-300 text-sm ${
@@ -899,7 +1103,7 @@ const Admin = () => {
               </div>
 
               <div className="space-y-3 max-h-[850px] overflow-y-auto pr-1">
-                {projects.map((p) => (
+                {projects.map((p, idx) => (
                   <div
                     key={p.id}
                     className="p-4 rounded-2xl bg-slate-950/70 border border-white/5 hover:border-primary/30 transition-all duration-200 flex flex-col gap-2"
@@ -909,7 +1113,29 @@ const Admin = () => {
                         <span className="text-[10px] font-bold text-primary uppercase">{p.categoryLabel}</span>
                         <h3 className="font-bold text-sm text-white line-clamp-1">{p.title}</h3>
                       </div>
-                      <div className="flex items-center gap-1.5 shrink-0">
+                      <div className="flex items-center gap-1 shrink-0">
+                        {/* Up / Down Reorder Buttons */}
+                        <div className="flex items-center gap-0.5 bg-slate-900 border border-white/10 rounded-lg p-0.5">
+                          <button
+                            type="button"
+                            onClick={() => handleMoveProject(idx, "up")}
+                            disabled={idx === 0}
+                            className="p-1 text-slate-400 hover:text-white disabled:opacity-20 hover:bg-slate-800 rounded transition-colors"
+                            title="Move Up"
+                          >
+                            <ArrowUp className="w-3 h-3" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleMoveProject(idx, "down")}
+                            disabled={idx === projects.length - 1}
+                            className="p-1 text-slate-400 hover:text-white disabled:opacity-20 hover:bg-slate-800 rounded transition-colors"
+                            title="Move Down"
+                          >
+                            <ArrowDown className="w-3 h-3" />
+                          </button>
+                        </div>
+
                         <Button
                           type="button"
                           onClick={() => handleEditProject(p)}

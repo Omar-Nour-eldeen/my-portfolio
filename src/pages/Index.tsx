@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
@@ -12,6 +14,23 @@ import ThankYou from "@/components/ThankYou";
 import Footer from "@/components/Footer";
 
 const Index = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    const scrollTo = (location.state as any)?.scrollTo || (location.hash ? location.hash.replace('#', '') : null);
+    if (scrollTo) {
+      const timer = setTimeout(() => {
+        const el = document.getElementById(scrollTo);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 150);
+      return () => clearTimeout(timer);
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [location]);
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />

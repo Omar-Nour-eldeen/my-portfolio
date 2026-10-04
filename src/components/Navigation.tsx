@@ -63,11 +63,7 @@ const Navigation = () => {
       const element = document.getElementById(targetId);
       element?.scrollIntoView({ behavior: 'smooth' });
     } else {
-      navigate('/');
-      setTimeout(() => {
-        const element = document.getElementById(targetId);
-        element?.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
+      navigate('/', { state: { scrollTo: targetId } });
     }
     setIsOpen(false);
   };

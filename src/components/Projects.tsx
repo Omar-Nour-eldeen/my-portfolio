@@ -194,12 +194,12 @@ const Projects = () => {
                           </Link>
                         </div>
 
-                        <p className="text-muted-foreground mb-3 leading-snug transition-colors duration-300 text-sm line-clamp-2">
+                        <p className="text-muted-foreground mb-3 leading-snug transition-colors duration-300 text-sm">
                           {project.description}
                         </p>
 
                         <div className="flex flex-wrap gap-1.5 mb-4">
-                          {project.technologies.slice(0, 4).map((tech) => (
+                          {project.technologies.map((tech) => (
                             <span
                               key={tech}
                               className="inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium transition-all duration-300"
@@ -212,11 +212,6 @@ const Projects = () => {
                               {tech}
                             </span>
                           ))}
-                          {project.technologies.length > 4 && (
-                            <span className="text-[10px] text-muted-foreground self-center">
-                              +{project.technologies.length - 4} more
-                            </span>
-                          )}
                         </div>
                       </div>
 
