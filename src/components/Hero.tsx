@@ -279,7 +279,7 @@ const Hero = () => {
           {/* Typing Title */}
           <h1 className={`text-2xl md:text-4xl font-bold mb-6 bg-gradient-primary bg-clip-text text-transparent min-h-[2.5rem] md:min-h-[3rem] hover:scale-105 transition-all duration-700 ease-out delay-400 ${isIntersecting ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
             <TypingText
-              text="Omar Nour Eldeen"
+              text="Omar Nour eldeen"
               speed={120}
               showCursor={false}
               repeat={false}

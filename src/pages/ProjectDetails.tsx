@@ -32,7 +32,8 @@ import {
   ArrowDown,
   ArrowRight,
   GitCommit,
-  Sparkles
+  Sparkles,
+  Loader2
 } from "lucide-react";
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
@@ -43,7 +44,7 @@ import { useProjects } from "@/hooks/use-projects";
 const ProjectDetails = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { projects } = useProjects();
+  const { projects, loading } = useProjects();
   const project = projects.find((p) => p.id === id);
 
   // Gallery carousel state
@@ -60,16 +61,40 @@ const ProjectDetails = () => {
     window.scrollTo(0, 0);
   }, [id]);
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-slate-950 text-white flex flex-col justify-between">
+        <Navigation />
+        <div className="flex flex-col items-center justify-center gap-4 py-32 px-6 text-center">
+          <div className="w-16 h-16 rounded-2xl bg-slate-900/90 border border-primary/30 flex items-center justify-center shadow-[0_0_30px_rgba(99,102,241,0.25)] relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 animate-pulse" />
+            <Loader2 className="w-8 h-8 text-primary animate-spin relative z-10" />
+          </div>
+          <p className="text-sm font-semibold text-slate-300 animate-pulse tracking-wide">
+            جاري تحميل تفاصيل المشروع...
+          </p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
   if (!project) {
     return (
-      <div className="min-h-screen bg-slate-950 text-white flex flex-col items-center justify-center p-6 text-center">
-        <h1 className="text-3xl sm:text-4xl font-bold mb-4">Project Not Found</h1>
-        <p className="text-muted-foreground mb-8 text-sm sm:text-base">The project you are looking for does not exist or has been moved.</p>
-        <Button asChild className="bg-gradient-primary">
-          <Link to="/">
-            <ArrowLeft className="w-4 h-4 mr-2" /> Back to Home
-          </Link>
-        </Button>
+      <div className="min-h-screen bg-slate-950 text-white flex flex-col justify-between">
+        <Navigation />
+        <div className="flex flex-col items-center justify-center gap-4 py-32 px-6 text-center max-w-md mx-auto">
+          <h1 className="text-3xl sm:text-4xl font-bold mb-2">Project Not Found</h1>
+          <p className="text-muted-foreground mb-6 text-sm sm:text-base">
+            The project you are looking for does not exist or has been moved.
+          </p>
+          <Button asChild className="bg-gradient-primary">
+            <Link to="/">
+              <ArrowLeft className="w-4 h-4 mr-2" /> Back to Home
+            </Link>
+          </Button>
+        </div>
+        <Footer />
       </div>
     );
   }
@@ -277,50 +302,45 @@ const ProjectDetails = () => {
                 </span>
               </div>
 
-              {/* Main Display Box */}
-              <div
-                onClick={() => handleOpenScreenshotLightbox(activeImageIdx)}
-                className="relative max-w-3xl mx-auto aspect-video rounded-xl sm:rounded-2xl overflow-hidden border border-white/10 bg-slate-950 flex items-center justify-center group shadow-inner cursor-pointer"
-              >
-                <img
-                  src={galleryImages[activeImageIdx]}
-                  alt={`${project.title} screenshot ${activeImageIdx + 1}`}
-                  className="w-full h-full object-contain transition-transform duration-700 ease-out group-hover:scale-[1.02]"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent pointer-events-none" />
+              {/* Main Display Box with outside Prev/Next arrows */}
+              <div className="relative flex items-center justify-center gap-2 sm:gap-4 max-w-4xl mx-auto">
+                {galleryImages.length > 1 && (
+                  <button
+                    onClick={() => handlePrevImage()}
+                    className="w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-slate-950/90 backdrop-blur-md border border-white/20 text-white flex items-center justify-center hover:bg-primary hover:border-primary hover:scale-110 active:scale-95 transition-all duration-300 shadow-xl shrink-0 z-10"
+                    aria-label="Previous Image"
+                  >
+                    <ChevronLeft className="w-4 h-4 sm:w-6 sm:h-6" />
+                  </button>
+                )}
 
-                {/* Hover overlay hint */}
-                <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center pointer-events-none">
-                  <span className="px-3.5 py-2 rounded-xl bg-slate-900/95 text-white font-bold text-xs flex items-center gap-2 border border-white/20 shadow-xl">
-                    <Maximize2 className="w-4 h-4 text-primary" /> Click to Enlarge & Zoom
-                  </span>
+                <div
+                  onClick={() => handleOpenScreenshotLightbox(activeImageIdx)}
+                  className="relative flex-1 aspect-video rounded-xl sm:rounded-2xl overflow-hidden border border-white/10 bg-slate-950 flex items-center justify-center group shadow-inner cursor-pointer max-w-3xl"
+                >
+                  <img
+                    src={galleryImages[activeImageIdx]}
+                    alt={`${project.title} screenshot ${activeImageIdx + 1}`}
+                    className="w-full h-full object-contain transition-transform duration-700 ease-out group-hover:scale-[1.02]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent pointer-events-none" />
+
+                  {/* Hover overlay hint */}
+                  <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center pointer-events-none">
+                    <span className="px-3.5 py-2 rounded-xl bg-slate-900/95 text-white font-bold text-xs flex items-center gap-2 border border-white/20 shadow-xl">
+                      <Maximize2 className="w-4 h-4 text-primary" /> Click to Enlarge & Zoom
+                    </span>
+                  </div>
                 </div>
 
-                {/* Prev / Next Buttons */}
                 {galleryImages.length > 1 && (
-                  <>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handlePrevImage();
-                      }}
-                      className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-slate-950/80 backdrop-blur-md border border-white/20 text-white flex items-center justify-center hover:bg-primary hover:border-primary hover:scale-110 active:scale-95 transition-all duration-300 shadow-xl z-10"
-                      aria-label="Previous Image"
-                    >
-                      <ChevronLeft className="w-5 h-5" />
-                    </button>
-
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleNextImage();
-                      }}
-                      className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-slate-950/80 backdrop-blur-md border border-white/20 text-white flex items-center justify-center hover:bg-primary hover:border-primary hover:scale-110 active:scale-95 transition-all duration-300 shadow-xl z-10"
-                      aria-label="Next Image"
-                    >
-                      <ChevronRight className="w-5 h-5" />
-                    </button>
-                  </>
+                  <button
+                    onClick={() => handleNextImage()}
+                    className="w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-slate-950/90 backdrop-blur-md border border-white/20 text-white flex items-center justify-center hover:bg-primary hover:border-primary hover:scale-110 active:scale-95 transition-all duration-300 shadow-xl shrink-0 z-10"
+                    aria-label="Next Image"
+                  >
+                    <ChevronRight className="w-4 h-4 sm:w-6 sm:h-6" />
+                  </button>
                 )}
               </div>
 
